@@ -1,0 +1,689 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+/* BODY */
+
+body{
+    min-height:100vh;
+    overflow-x:hidden;
+
+    background:linear-gradient(
+        135deg,
+        #4f46e5,
+        #7c3aed,
+        #ec4899,
+        #f97316
+    );
+
+    background-size:400% 400%;
+
+    animation:gradientBG 12s ease infinite;
+}
+
+/* ANIMATED BACKGROUND */
+
+@keyframes gradientBG{
+
+    0%{
+        background-position:0% 50%;
+    }
+
+    50%{
+        background-position:100% 50%;
+    }
+
+    100%{
+        background-position:0% 50%;
+    }
+
+}
+
+/* MAIN */
+
+.main-container{
+    padding:40px;
+}
+
+/* LEFT SIDE */
+
+.left-side{
+
+    position:relative;
+
+    overflow:hidden;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:60px;
+}
+
+/* LEFT CONTENT */
+
+.left-content{
+    color:white;
+    animation:fadeInLeft 1s ease;
+    position:relative;
+    z-index:2;
+}
+
+/* LOGO */
+
+.logo{
+    font-size:34px;
+    font-weight:700;
+    margin-bottom:30px;
+}
+
+/* TAG */
+
+.tag{
+    background:rgba(255,255,255,0.15);
+
+    backdrop-filter:blur(10px);
+
+    padding:12px 24px;
+
+    border-radius:40px;
+
+    display:inline-block;
+
+    margin-bottom:30px;
+
+    border:1px solid rgba(255,255,255,0.2);
+
+    font-size:15px;
+}
+
+/* HEADING */
+
+.left-content h1{
+    font-size:72px;
+    font-weight:700;
+    line-height:1.2;
+}
+
+/* TEXT */
+
+.left-content p{
+    margin-top:25px;
+    font-size:20px;
+    max-width:550px;
+    opacity:0.95;
+    line-height:1.8;
+}
+
+/* IMAGE */
+
+.hero-image{
+    width:100%;
+    max-width:480px;
+    margin-top:40px;
+    border-radius:30px;
+
+    box-shadow:0 15px 40px rgba(0,0,0,0.25);
+
+    transition:0.4s;
+}
+
+.hero-image:hover{
+    transform:translateY(-10px) scale(1.02);
+}
+
+/* GLOW CIRCLES */
+
+.circle{
+
+    position:absolute;
+
+    border-radius:50%;
+
+    filter:blur(80px);
+
+    opacity:0.5;
+}
+
+/* TOP GLOW */
+
+.circle.one{
+
+    width:300px;
+    height:300px;
+
+    background:#ff4ecd;
+
+    top:-50px;
+    left:-50px;
+}
+
+/* BOTTOM GLOW */
+
+.circle.two{
+
+    width:250px;
+    height:250px;
+
+    background:#7c3aed;
+
+    bottom:-50px;
+    right:50px;
+}
+
+/* RIGHT CARD */
+
+.auth-card{
+
+    width:100%;
+    max-width:620px;
+
+    padding:50px;
+
+    border-radius:35px;
+
+    background:rgba(255,255,255,0.18);
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(255,255,255,0.2);
+
+    box-shadow:0 20px 50px rgba(0,0,0,0.25);
+
+    animation:fadeInRight 1s ease;
+
+    transition:0.4s;
+}
+
+/* CARD HOVER */
+
+.auth-card:hover{
+
+    transform:translateY(-5px);
+}
+
+/* TITLE */
+
+.auth-card h2{
+    font-size:50px;
+    font-weight:700;
+    color:white;
+}
+
+/* SUBTEXT */
+
+.sub-text{
+    color:#f3f4f6;
+    margin-bottom:35px;
+    font-size:17px;
+}
+
+/* LABEL */
+
+label{
+    color:white;
+    font-weight:500;
+    margin-bottom:8px;
+}
+
+/* INPUT */
+
+.form-control{
+
+    height:62px;
+
+    border-radius:18px;
+
+    border:none;
+
+    background:rgba(255,255,255,0.18);
+
+    color:white;
+
+    padding-left:20px;
+
+    font-size:16px;
+
+    transition:0.3s;
+}
+
+/* INPUT HOVER */
+
+.form-control:hover{
+
+    background:rgba(255,255,255,0.25);
+}
+
+/* PLACEHOLDER */
+
+.form-control::placeholder{
+    color:#e5e7eb;
+}
+
+/* FOCUS */
+
+.form-control:focus{
+
+    background:rgba(255,255,255,0.22);
+
+    color:white;
+
+    box-shadow:none;
+
+    border:2px solid #ffffff;
+}
+
+/* PASSWORD */
+
+.password-box{
+    position:relative;
+}
+
+/* TOGGLE */
+
+.toggle-password{
+
+    position:absolute;
+
+    right:20px;
+
+    top:50px;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:18px;
+}
+
+/* BUTTON */
+
+.register-btn{
+
+    height:62px;
+
+    border:none;
+
+    border-radius:18px;
+
+    background:linear-gradient(
+        90deg,
+        #ff4ecd,
+        #ff8a5c
+    );
+
+    color:white;
+
+    font-size:19px;
+
+    font-weight:600;
+
+    transition:0.4s;
+}
+
+/* BUTTON HOVER */
+
+.register-btn:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:0 12px 25px rgba(255,78,205,0.45);
+}
+
+/* BUTTON ACTIVE */
+
+.register-btn:active{
+
+    transform:scale(0.98);
+}
+
+/* LOGIN */
+
+.login-link{
+    text-align:center;
+    margin-top:28px;
+    color:white;
+}
+
+/* LINK */
+
+.login-link a{
+    color:#fff;
+    font-weight:700;
+    text-decoration:none;
+}
+
+/* PROGRESS */
+
+.progress{
+    height:8px;
+    border-radius:30px;
+    overflow:hidden;
+}
+
+/* PROGRESS BAR */
+
+.progress-bar{
+    background:linear-gradient(
+        90deg,
+        #ff4ecd,
+        #ff8a5c
+    );
+}
+
+/* AJAX */
+
+#emailMessage{
+    color:#86efac;
+    font-size:14px;
+    margin-top:6px;
+    display:block;
+}
+
+/* FEATURE LIST */
+
+.feature-list{
+    margin-top:40px;
+}
+
+/* FEATURE ITEM */
+
+.feature-item{
+
+    display:flex;
+
+    align-items:center;
+
+    margin-bottom:20px;
+
+    font-size:18px;
+
+    color:white;
+}
+
+/* FEATURE ICON */
+
+.feature-item i{
+
+    width:45px;
+    height:45px;
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    border-radius:12px;
+
+    margin-right:15px;
+
+    background:rgba(255,255,255,0.15);
+
+    backdrop-filter:blur(10px);
+
+    font-size:20px;
+
+    color:#ffffff;
+
+    transition:0.3s;
+}
+
+/* ICON HOVER */
+
+.feature-item:hover i{
+
+    transform:scale(1.1);
+}
+
+/* REMEMBER */
+
+.remember-box{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    color:white;
+}
+
+/* FORGOT */
+
+.forgot-link{
+
+    color:white;
+
+    text-decoration:none;
+
+    font-weight:500;
+
+    transition:0.3s;
+}
+
+.forgot-link:hover{
+
+    color:#ffe4f1;
+}
+
+/* NAVBAR */
+
+.custom-navbar{
+    padding:25px 0;
+}
+
+/* LOGOUT */
+
+.logout-btn{
+
+    border:none;
+
+    background:white;
+
+    color:#ec4899;
+
+    padding:12px 28px;
+
+    border-radius:14px;
+
+    font-weight:600;
+
+    transition:0.3s;
+}
+
+.logout-btn:hover{
+    transform:translateY(-2px);
+}
+
+/* DASHBOARD */
+
+.dashboard-section{
+
+    min-height:90vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:40px;
+}
+
+/* DASHBOARD CARD */
+
+.dashboard-card{
+
+    width:100%;
+
+    max-width:1200px;
+
+    background:rgba(255,255,255,0.15);
+
+    backdrop-filter:blur(20px);
+
+    border-radius:35px;
+
+    padding:60px;
+
+    text-align:center;
+
+    border:1px solid rgba(255,255,255,0.2);
+
+    box-shadow:0 20px 50px rgba(0,0,0,0.25);
+}
+
+/* DASHBOARD ICON */
+
+.dashboard-icon{
+
+    font-size:90px;
+
+    color:white;
+
+    margin-bottom:20px;
+}
+
+/* DASHBOARD TEXT */
+
+.dashboard-card h1{
+
+    font-size:55px;
+
+    color:white;
+
+    font-weight:700;
+}
+
+.dashboard-card p{
+
+    color:#f3f4f6;
+
+    font-size:18px;
+
+    margin-top:20px;
+}
+
+/* FEATURE CARD */
+
+.feature-card{
+
+    background:rgba(255,255,255,0.12);
+
+    border-radius:25px;
+
+    padding:35px;
+
+    transition:0.4s;
+
+    height:100%;
+
+    color:white;
+
+    backdrop-filter:blur(10px);
+}
+
+/* FEATURE HOVER */
+
+.feature-card:hover{
+
+    transform:translateY(-8px);
+
+    background:rgba(255,255,255,0.18);
+
+    box-shadow:0 10px 25px rgba(255,255,255,0.15);
+}
+
+/* FEATURE ICON */
+
+.feature-card i{
+
+    font-size:50px;
+
+    margin-bottom:20px;
+}
+
+/* FEATURE TITLE */
+
+.feature-card h4{
+
+    font-weight:700;
+
+    margin-bottom:12px;
+}
+
+/* ANIMATIONS */
+
+@keyframes fadeInLeft{
+
+    from{
+        opacity:0;
+        transform:translateX(-40px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateX(0);
+    }
+}
+
+@keyframes fadeInRight{
+
+    from{
+        opacity:0;
+        transform:translateX(40px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateX(0);
+    }
+}
+
+/* MOBILE */
+
+@media(max-width:991px){
+
+    .main-container{
+        padding:20px;
+    }
+
+    .auth-card{
+        padding:35px;
+        margin:20px 0;
+    }
+
+    .auth-card h2{
+        font-size:38px;
+    }
+
+    .left-content h1{
+        font-size:50px;
+    }
+
+    .dashboard-card{
+        padding:35px;
+    }
+
+    .dashboard-card h1{
+        font-size:38px;
+    }
+
+    .sub-text{
+        font-size:15px;
+    }
+
+    .form-control{
+        height:58px;
+    }
+
+    .register-btn{
+        height:58px;
+    }
+
+}

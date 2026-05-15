@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>SmartAuthenticator - Register</title>
+
+    <!-- FAVICON -->
+
+    <link rel="icon"
+          href="./assests/icons/favicon.png">
+
+    <!-- Bootstrap -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Google Fonts -->
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <!-- CSS -->
+
+    <link rel="stylesheet"
+          href="css/style.css">
+
+</head>
+
+<body>
+
+<!-- MAIN CONTAINER -->
+
+<div class="container-fluid main-container">
+
+    <div class="row min-vh-100">
+
+        <!-- LEFT SIDE -->
+
+        <div class="col-lg-6 left-side d-none d-lg-flex">
+
+            <!-- GLOW EFFECTS -->
+
+            <div class="circle one"></div>
+
+            <div class="circle two"></div>
+
+            <!-- LEFT CONTENT -->
+
+            <div class="left-content">
+
+                <!-- LOGO -->
+
+                <div class="d-flex align-items-center gap-3 mb-4">
+
+                    <img src="./assests/icons/logo.avif"
+                         width="50"
+                         alt="Logo">
+
+                    <h2 class="logo mb-0">
+                        SmartAuthenticator
+                    </h2>
+
+                </div>
+
+                <!-- TAG -->
+
+                <span class="tag">
+                    Create Your Account
+                </span>
+
+                <!-- HEADING -->
+
+                <h1>
+                    Join Smart <br>
+                    Authenticator
+                </h1>
+
+                <!-- TEXT -->
+
+                <p>
+                    Create your account and explore a secure,
+                    modern and seamless authentication experience.
+                </p>
+
+                <!-- IMAGE -->
+
+                <img src="./assests/images/auth-bg1.jpg"
+                     class="hero-image"
+                     alt="Authentication">
+
+                <!-- FEATURES -->
+
+                <div class="feature-list">
+
+                    <div class="feature-item">
+
+                        <i class="bi bi-shield-lock"></i>
+
+                        <span>
+                            Secure Authentication
+                        </span>
+
+                    </div>
+
+                    <div class="feature-item">
+
+                        <i class="bi bi-phone"></i>
+
+                        <span>
+                            Fully Responsive Design
+                        </span>
+
+                    </div>
+
+                    <div class="feature-item">
+
+                        <i class="bi bi-lightning-charge"></i>
+
+                        <span>
+                            Fast & Modern Experience
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT SIDE -->
+
+        <div class="col-lg-6 d-flex justify-content-center align-items-center">
+
+            <div class="auth-card">
+
+                <h2>
+                    Create Account
+                </h2>
+
+                <p class="sub-text">
+                    Fill in the details below to get started
+                </p>
+
+                <!-- REGISTER FORM -->
+
+                <form id="registerForm"
+                      autocomplete="off">
+
+                    <!-- FULL NAME -->
+
+                    <div class="mb-3">
+
+                        <label>
+                            Full Name
+                        </label>
+
+                        <input type="text"
+                               class="form-control"
+                               id="name"
+                               placeholder="Enter your full name"
+                               required>
+
+                    </div>
+
+                    <!-- EMAIL -->
+
+                    <div class="mb-3">
+
+                        <label>
+                            Email Address
+                        </label>
+
+                        <input type="email"
+                               class="form-control"
+                               id="email"
+                               placeholder="Enter your email"
+                               autocomplete="off"
+                               required>
+
+                        <small id="emailMessage"
+                               class="d-block mt-2 fw-semibold">
+                        </small>
+
+                    </div>
+
+                    <!-- PASSWORD -->
+
+                    <div class="mb-3 password-box">
+
+                        <label>
+                            Password
+                        </label>
+
+                        <input type="password"
+                               class="form-control"
+                               id="password"
+                               placeholder="Enter your password"
+                               required>
+
+                        <i class="bi bi-eye-fill toggle-password"></i>
+
+                    </div>
+
+                    <!-- PASSWORD STRENGTH -->
+
+                    <div class="progress mb-3">
+
+                        <div class="progress-bar"
+                             id="strengthBar">
+                        </div>
+
+                    </div>
+
+                    <!-- CONFIRM PASSWORD -->
+
+                    <div class="mb-4 password-box">
+
+                        <label>
+                            Confirm Password
+                        </label>
+
+                        <input type="password"
+                               class="form-control"
+                               id="confirmPassword"
+                               placeholder="Confirm your password"
+                               required>
+
+                        <i class="bi bi-eye-fill toggle-password"></i>
+
+                    </div>
+
+                    <!-- BUTTON -->
+
+                    <button type="submit"
+                            class="btn register-btn w-100"
+                            id="registerBtn">
+
+                        <i class="bi bi-person-plus-fill"></i>
+
+                        Create Account
+
+                    </button>
+
+                    <!-- LOGIN -->
+
+                    <p class="login-link">
+
+                        Already have an account?
+
+                        <a href="index.html">
+                            Login
+                        </a>
+
+                    </p>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Bootstrap JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- SweetAlert -->
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- JS -->
+
+<script src="js/script.js"></script>
+
+<script src="js/ajax.js"></script>
+
+</body>
+
+</html>
