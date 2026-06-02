@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" fill="none" aria-hidden="true">
+  <defs>
+    <linearGradient id="an1" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#0d9488" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#22d3ee" stop-opacity="0.45"/>
+    </linearGradient>
+    <linearGradient id="an2" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#14b8a6"/>
+      <stop offset="1" stop-color="#38bdf8"/>
+    </linearGradient>
+    <linearGradient id="anBar" x1="0" y1="1" x2="0" y2="0">
+      <stop stop-color="#0d9488"/>
+      <stop offset="1" stop-color="#2dd4bf"/>
+    </linearGradient>
+  </defs>
+  <rect width="480" height="320" rx="20" fill="#0f172a"/>
+  <rect x="28" y="28" width="424" height="168" rx="16" fill="#1e293b"/>
+  <path d="M52 176 L120 132 L196 148 L276 88 L356 108 L428 64" stroke="url(#an2)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M52 176 L120 132 L196 148 L276 88 L356 108 L428 64 L428 176 L52 176 Z" fill="url(#an1)"/>
+  <circle cx="276" cy="88" r="5" fill="#38bdf8"/>
+  <circle cx="428" cy="64" r="6" fill="#2dd4bf"/>
+  <rect x="52" y="216" width="72" height="72" rx="10" fill="#1e293b"/>
+  <rect x="64" y="248" width="48" height="28" rx="6" fill="url(#anBar)" opacity="0.35"/>
+  <rect x="148" y="216" width="72" height="72" rx="10" fill="#1e293b"/>
+  <rect x="160" y="232" width="48" height="44" rx="6" fill="url(#anBar)" opacity="0.55"/>
+  <rect x="244" y="216" width="72" height="72" rx="10" fill="#1e293b" stroke="rgba(45,212,191,0.35)"/>
+  <rect x="256" y="220" width="48" height="52" rx="6" fill="url(#anBar)"/>
+  <rect x="340" y="216" width="72" height="72" rx="10" fill="#1e293b"/>
+  <rect x="352" y="244" width="48" height="32" rx="6" fill="url(#anBar)" opacity="0.45"/>
+  <rect x="428" y="216" width="24" height="72" rx="8" fill="url(#an2)" opacity="0.2"/>
+</svg>

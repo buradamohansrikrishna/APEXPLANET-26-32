@@ -1,0 +1,25 @@
+{
+    "name": "skillsphere/platform",
+    "description": "SkillSphere - Modern Online Learning Platform",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.0.0"
+    },
+    "autoload": {
+        "files": [
+            "config.php",
+            "db.php",
+            "auth.php",
+            "functions.php",
+            "helpers.php",
+            "middleware.php",
+            "routes.php",
+            "session.php",
+            "csrf.php",
+            "validator.php",
+            "mailer.php",
+            "security.php"
+        ]
+    }
+}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 250" width="100%" height="100%">
+    <rect width="400" height="250" fill="#f7df1e" />
+    
+    <!-- JS Shield logo representation -->
+    <g transform="translate(130, 45)">
+        <polygon points="20,0 120,0 110,130 70,160 30,130" fill="#000000" />
+        <text x="40" y="110" font-family="system-ui" font-weight="900" font-size="70" fill="#f7df1e">JS</text>
+    </g>
+    <rect x="25" y="195" width="130" height="24" rx="6" fill="#000000" />
+    <text x="35" y="211" font-family="system-ui" font-size="10" font-weight="bold" fill="#f7df1e">JAVASCRIPT MASTER</text>
+</svg>

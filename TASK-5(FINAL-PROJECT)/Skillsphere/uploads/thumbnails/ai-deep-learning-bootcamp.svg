@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 250" width="100%" height="100%">
+    <defs>
+        <radialGradient id="aiGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ec4899" stop-opacity="0.3" />
+            <stop offset="100%" stop-color="#7c3aed" stop-opacity="0.0" />
+        </radialGradient>
+    </defs>
+    <rect width="400" height="250" fill="#1e1b4b" />
+    
+    <!-- AI Brain nodes synapse network -->
+    <rect width="400" height="250" fill="url(#aiGlow)" />
+    
+    <g transform="translate(50, 40)" stroke="#ec4899" stroke-width="1.5">
+        <!-- Input Layer -->
+        <circle cx="50" cy="50" r="8" fill="#ec4899" />
+        <circle cx="50" cy="110" r="8" fill="#ec4899" />
+        <circle cx="50" cy="170" r="8" fill="#ec4899" />
+        
+        <!-- Hidden Layer 1 -->
+        <circle cx="150" cy="30" r="8" fill="#8b5cf6" stroke="#8b5cf6" />
+        <circle cx="150" cy="90" r="8" fill="#8b5cf6" stroke="#8b5cf6" />
+        <circle cx="150" cy="150" r="8" fill="#8b5cf6" stroke="#8b5cf6" />
+        <circle cx="150" cy="210" r="8" fill="#8b5cf6" stroke="#8b5cf6" />
+        
+        <!-- Output Layer -->
+        <circle cx="250" cy="80" r="8" fill="#e11d48" stroke="#e11d48" />
+        <circle cx="250" cy="140" r="8" fill="#e11d48" stroke="#e11d48" />
+        
+        <!-- Connectors -->
+        <line x1="50" y1="50" x2="150" y2="30" opacity="0.3" />
+        <line x1="50" y1="50" x2="150" y2="90" opacity="0.3" />
+        <line x1="50" y1="50" x2="150" y2="150" opacity="0.3" />
+        
+        <line x1="50" y1="110" x2="150" y2="30" opacity="0.3" />
+        <line x1="50" y1="110" x2="150" y2="90" opacity="0.3" />
+        <line x1="50" y1="110" x2="150" y2="150" opacity="0.3" />
+        <line x1="50" y1="110" x2="150" y2="210" opacity="0.3" />
+        
+        <line x1="150" y1="30" x2="250" y2="80" opacity="0.4" />
+        <line x1="150" y1="90" x2="250" y2="80" opacity="0.4" />
+        <line x1="150" y1="90" x2="250" y2="140" opacity="0.4" />
+        <line x1="150" y1="150" x2="250" y2="140" opacity="0.4" />
+        <line x1="150" y1="210" x2="250" y2="140" opacity="0.4" />
+    </g>
+    
+    <!-- Tech badge -->
+    <rect x="25" y="195" width="140" height="24" rx="6" fill="#ec4899" />
+    <text x="35" y="211" font-family="system-ui" font-size="10" font-weight="bold" fill="#ffffff">AI &amp; BOOTCAMP DEEP</text>
+</svg>

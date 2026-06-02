@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 250" width="100%" height="100%">
+    <rect width="400" height="250" fill="#faf9f5" />
+    
+    <!-- Server Stack Layout -->
+    <g transform="translate(130, 45)">
+        <rect x="0" y="0" width="140" height="40" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+        <rect x="15" y="15" width="10" height="10" rx="5" fill="#22c55e" />
+        <line x1="40" y1="20" x2="110" y2="20" stroke="#cbd5e1" stroke-width="4" stroke-linecap="round" />
+        
+        <rect x="0" y="55" width="140" height="40" rx="8" fill="#ffffff" stroke="#4f46e5" stroke-width="2" />
+        <rect x="15" y="70" width="10" height="10" rx="5" fill="#22c55e" />
+        <line x1="40" y1="75" x2="110" y2="75" stroke="#4f46e5" stroke-width="4" stroke-linecap="round" />
+        
+        <rect x="0" y="110" width="140" height="40" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+        <rect x="15" y="125" width="10" height="10" rx="5" fill="#cbd5e1" />
+        <line x1="40" y1="130" x2="110" y2="130" stroke="#cbd5e1" stroke-width="4" stroke-linecap="round" />
+    </g>
+</svg>

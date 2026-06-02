@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" fill="none" role="img" aria-label="Online learning illustration">
+  <defs>
+    <linearGradient id="hg1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="50%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <linearGradient id="hg2" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#34d399" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#a78bfa" stop-opacity="0.6"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="640" height="480" rx="32" fill="#0a1d18"/>
+  <circle cx="520" cy="80" r="120" fill="url(#hg2)" opacity="0.5"/>
+  <circle cx="100" cy="400" r="90" fill="url(#hg2)" opacity="0.35"/>
+  <rect x="48" y="56" width="280" height="200" rx="20" fill="#122c24" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  <rect x="68" y="76" width="120" height="8" rx="4" fill="#214339"/>
+  <rect x="68" y="96" width="200" height="6" rx="3" fill="#214339"/>
+  <rect x="68" y="112" width="160" height="6" rx="3" fill="#214339"/>
+  <rect x="68" y="140" width="240" height="96" rx="12" fill="url(#hg1)" opacity="0.9"/>
+  <path d="M108 188 L128 168 L148 182 L188 142 L228 188 Z" fill="rgba(255,255,255,0.2)"/>
+  <rect x="360" y="120" width="220" height="280" rx="24" fill="#122c24" stroke="rgba(255,255,255,0.1)" stroke-width="1" filter="url(#glow)"/>
+  <rect x="380" y="148" width="80" height="80" rx="40" fill="url(#hg1)"/>
+  <rect x="380" y="244" width="180" height="10" rx="5" fill="#214339"/>
+  <rect x="380" y="264" width="140" height="8" rx="4" fill="#214339"/>
+  <rect x="380" y="290" width="180" height="48" rx="12" fill="url(#hg1)" opacity="0.25"/>
+  <rect x="380" y="354" width="100" height="32" rx="16" fill="url(#hg1)"/>
+  <circle cx="320" cy="400" r="56" fill="url(#hg1)" opacity="0.2"/>
+  <path d="M80 380 L200 320 L320 360 L480 280 L560 340" stroke="url(#hg1)" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.6"/>
+</svg>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 250" width="100%" height="100%">
+    <defs>
+        <linearGradient id="sysGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#3b82f6" />
+            <stop offset="100%" stop-color="#1d4ed8" />
+        </linearGradient>
+    </defs>
+    <rect width="400" height="250" fill="#faf9f5" />
+    
+    <!-- Grid nodes representing system design blocks -->
+    <g transform="translate(40, 30)">
+        <!-- Microservice nodes -->
+        <rect x="20" y="70" width="80" height="50" rx="8" fill="url(#sysGrad)" stroke="#1e40af" stroke-width="1.5" />
+        <text x="35" y="100" font-family="system-ui" font-size="11" font-weight="bold" fill="#ffffff">Gateway</text>
+        
+        <rect x="170" y="20" width="80" height="50" rx="8" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5" />
+        <text x="182" y="50" font-family="system-ui" font-size="11" font-weight="bold" fill="#1e3a8a">Auth-Svc</text>
+        
+        <rect x="170" y="120" width="80" height="50" rx="8" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5" />
+        <text x="182" y="150" font-family="system-ui" font-size="11" font-weight="bold" fill="#1e3a8a">Core-Svc</text>
+        
+        <!-- Database node -->
+        <cylinder>
+            <rect x="290" y="70" width="60" height="55" rx="10" fill="#f8fafc" stroke="#f59e0b" stroke-width="2" />
+            <line x1="290" y1="88" x2="350" y2="88" stroke="#f59e0b" stroke-width="2" />
+            <line x1="290" y1="106" x2="350" y2="106" stroke="#f59e0b" stroke-width="2" />
+            <text x="303" y="105" font-family="system-ui" font-size="11" font-weight="bold" fill="#b45309">DB</text>
+        </cylinder>
+        
+        <!-- Connection pipes -->
+        <path d="M100,95 L170,45" fill="none" stroke="#64748b" stroke-width="2" stroke-dasharray="4,4" />
+        <path d="M100,95 L170,145" fill="none" stroke="#64748b" stroke-width="2" stroke-dasharray="4,4" />
+        <path d="M250,45 L290,95" fill="none" stroke="#64748b" stroke-width="2" />
+        <path d="M250,145 L290,95" fill="none" stroke="#64748b" stroke-width="2" />
+    </g>
+</svg>

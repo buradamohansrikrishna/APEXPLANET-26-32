@@ -1,0 +1,18 @@
+[
+    {
+        "id": 1,
+        "title": "Getting Started with Next.js 15",
+        "excerpt": "A guide to server components, routing patterns, and data loading in modern Next.js.",
+        "content": "<p>Next.js 15 brings powerful updates to Server Components and caching. Let's explore how to configure layouts, routes, and data loading safely in standard SaaS setups.<\/p>",
+        "author": "Dr. Sravani Devi",
+        "date": "2026-05-20"
+    },
+    {
+        "id": 2,
+        "title": "Demystifying gRPC in Go microservices",
+        "excerpt": "Why gRPC is preferred over REST APIs for internal service communication.",
+        "content": "<p>gRPC uses Protocol Buffers over HTTP\/2, facilitating streaming RPCs and high performance. Here is how to configure grpc-go endpoints in microservices.<\/p>",
+        "author": "Venkata Srinivas",
+        "date": "2026-05-18"
+    }
+]

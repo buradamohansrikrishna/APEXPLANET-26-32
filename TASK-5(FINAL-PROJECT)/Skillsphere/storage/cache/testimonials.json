@@ -1,0 +1,16 @@
+[
+    {
+        "id": 1,
+        "name": "Pranathi Goud",
+        "role": "Frontend Engineer",
+        "quote": "The platform UI alone sets SkillSphere apart. Courses are structured like real product work.",
+        "approved": true
+    },
+    {
+        "id": 2,
+        "name": "Kiran Kumar Chowdary",
+        "role": "Full-stack Developer",
+        "quote": "Finally an EdTech product that doesn't feel like a template.",
+        "approved": true
+    }
+]

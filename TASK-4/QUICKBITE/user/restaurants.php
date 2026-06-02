@@ -1,546 +1,270 @@
 <?php
+session_start();
+require_once '../config/db.php';
 
-include '../config/db.php';
+$search   = isset($_GET['search'])   ? trim($_GET['search'])   : '';
+$category = isset($_GET['category']) ? trim($_GET['category']) : '';
 
-include '../includes/navbar.php';
+// Build query dynamically
+$where_parts = ["r.status = 'active'"];
+$params      = [];
+$types       = '';
 
-/* =========================
-   FETCH RESTAURANTS
-========================= */
+if ($search !== '') {
+    $where_parts[] = "(r.name LIKE ? OR r.description LIKE ?)";
+    $like = "%{$search}%";
+    $params[] = $like;
+    $params[] = $like;
+    $types   .= 'ss';
+}
 
-$query =
-"SELECT * FROM restaurants
- ORDER BY id DESC";
+if ($category !== '' && $category !== 'All') {
+    $where_parts[] = "r.category = ?";
+    $params[] = $category;
+    $types   .= 's';
+}
 
-$result =
-mysqli_query($conn, $query);
+$where_sql = implode(' AND ', $where_parts);
+$sql = "SELECT r.*, 
+               COALESCE(AVG(rv.rating), 0) as avg_rating,
+               COUNT(rv.id) as review_count
+        FROM restaurants r
+        LEFT JOIN reviews rv ON rv.restaurant_id = r.id
+        WHERE {$where_sql}
+        GROUP BY r.id
+        ORDER BY avg_rating DESC";
+
+$stmt = $conn->prepare($sql);
+if (!empty($params)) {
+    $stmt->bind_param($types, ...$params);
+}
+$stmt->execute();
+$restaurants = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+$stmt->close();
+
+// Categories for filter pills
+$categories = ['All', 'Fast Food', 'Indian', 'Italian', 'Chinese', 'Mexican'];
+
+// Helper: is restaurant open right now?
+function is_open(string $opening, string $closing): bool {
+    $now     = date('H:i:s');
+    $open    = date('H:i:s', strtotime($opening));
+    $close   = date('H:i:s', strtotime($closing));
+    if ($close > $open) {
+        return $now >= $open && $now <= $close;
+    }
+    // Overnight
+    return $now >= $open || $now <= $close;
+}
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width,
-          initial-scale=1.0">
-
-    <title>Restaurants</title>
-
-    <link rel="stylesheet"
-          href="../assets/css/style.css">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Restaurants – QuickBite 2.0</title>
+    <meta name="description" content="Browse and discover top restaurants near you on QuickBite. Filter by cuisine and search by name.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/animations.css">
+    <link rel="stylesheet" href="../assets/css/responsive.css">
     <style>
+        :root {
+            --neon-cyan:#00F7FF; --bg-dark:#050816; --bg-secondary:#0B1020;
+            --bg-card:rgba(255,255,255,0.04); --text-primary:#F0F4FF; --text-secondary:#94A3B8;
+            --border-glass:rgba(255,255,255,0.08); --neon-glow:0 0 20px rgba(0,247,255,0.3);
+            --green:#00D084; --orange:#FF8C42;
+        }
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Inter',sans-serif;background:var(--bg-dark);color:var(--text-primary);min-height:100vh;overflow-x:hidden;}
 
-        body{
+        /* HERO */
+        .page-hero{
+            background:linear-gradient(135deg,#050816 0%,#0a1a3e 60%,#050816 100%);
+            padding:4rem 2rem 3rem; text-align:center; position:relative; overflow:hidden;
+        }
+        .page-hero::before{
+            content:'';position:absolute;inset:0;
+            background:radial-gradient(ellipse 80% 60% at 50% 100%,rgba(0,247,255,0.06),transparent);
+            pointer-events:none;
+        }
+        .page-hero h1{font-size:2.6rem;font-weight:800;margin-bottom:0.6rem;}
+        .page-hero h1 span{background:linear-gradient(90deg,var(--neon-cyan),#9B59B6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+        .page-hero p{color:var(--text-secondary);margin-bottom:2rem;font-size:1.05rem;}
 
-            background:
-            linear-gradient(
-                to right,
-                #fff7ed,
-                #ffffff
-            );
+        /* SEARCH FORM */
+        .search-form{display:flex;gap:0.8rem;max-width:560px;margin:0 auto;position:relative;z-index:1;}
+        .search-input{
+            flex:1;padding:0.85rem 1.2rem;
+            background:rgba(255,255,255,0.06);border:1px solid var(--border-glass);
+            border-radius:12px;color:var(--text-primary);font-size:0.95rem;
+            backdrop-filter:blur(10px);outline:none;transition:border-color 0.3s;
+        }
+        .search-input:focus{border-color:var(--neon-cyan);box-shadow:0 0 0 3px rgba(0,247,255,0.1);}
+        .search-input::placeholder{color:var(--text-secondary);}
+        .btn-search{
+            padding:0.85rem 1.6rem;
+            background:linear-gradient(135deg,var(--neon-cyan),#00b8c8);
+            border:none;border-radius:12px;color:#050816;font-weight:700;
+            cursor:pointer;transition:opacity 0.3s;white-space:nowrap;
+        }
+        .btn-search:hover{opacity:0.85;}
+
+        /* FILTER PILLS */
+        .filters-wrap{max-width:1200px;margin:0 auto;padding:1.5rem 2rem 0;display:flex;gap:0.7rem;flex-wrap:wrap;}
+        .filter-pill{
+            padding:0.5rem 1.2rem;border-radius:30px;font-size:0.85rem;font-weight:600;
+            text-decoration:none;border:1px solid var(--border-glass);
+            color:var(--text-secondary);background:var(--bg-card);
+            transition:all 0.25s ease;white-space:nowrap;
+        }
+        .filter-pill:hover,.filter-pill.active{
+            background:rgba(0,247,255,0.12);border-color:var(--neon-cyan);
+            color:var(--neon-cyan);box-shadow:0 0 12px rgba(0,247,255,0.2);
         }
 
-        .restaurants-hero{
+        /* RESULTS META */
+        .results-meta{max-width:1200px;margin:1.5rem auto 0;padding:0 2rem;color:var(--text-secondary);font-size:0.88rem;}
 
-            width:90%;
+        /* RESTAURANT GRID */
+        .restaurants-grid{max-width:1200px;margin:1.5rem auto 4rem;padding:0 2rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1.8rem;}
+        @media(max-width:900px){.restaurants-grid{grid-template-columns:repeat(2,1fr);}}
+        @media(max-width:560px){.restaurants-grid{grid-template-columns:1fr;}}
 
-            margin:120px auto 50px;
-
-            background:
-            linear-gradient(
-                135deg,
-                #ff6b35,
-                #ff9f1c
-            );
-
-            border-radius:40px;
-
-            padding:70px;
-
-            color:white;
-
-            position:relative;
-
-            overflow:hidden;
+        /* RESTAURANT CARD */
+        .rest-card{
+            background:var(--bg-card);border:1px solid var(--border-glass);
+            border-radius:18px;overflow:hidden;
+            transition:all 0.35s ease;animation:card-in 0.5s ease both;
         }
-
-        .restaurants-hero::before{
-
-            content:'';
-
-            position:absolute;
-
-            width:350px;
-            height:350px;
-
-            background:
-            rgba(255,255,255,0.12);
-
-            border-radius:50%;
-
-            top:-120px;
-            right:-120px;
+        @keyframes card-in{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+        .rest-card:hover{transform:translateY(-6px);border-color:rgba(0,247,255,0.25);box-shadow:0 12px 30px rgba(0,0,0,0.5);}
+        .rest-img-wrap{position:relative;height:190px;overflow:hidden;}
+        .rest-img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s ease;}
+        .rest-card:hover .rest-img{transform:scale(1.05);}
+        .rest-img-placeholder{
+            width:100%;height:190px;
+            background:linear-gradient(135deg,#0B1020,#0d1a40);
+            display:flex;align-items:center;justify-content:center;font-size:3.5rem;
         }
-
-        .restaurants-hero h1{
-
-            font-size:3.8rem;
-
-            margin-bottom:18px;
-
-            position:relative;
-            z-index:2;
+        .rating-badge{
+            position:absolute;top:12px;right:12px;
+            background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);
+            border:1px solid rgba(255,215,0,0.4);border-radius:20px;
+            padding:0.3rem 0.7rem;font-size:0.8rem;font-weight:700;color:#FFD700;
         }
-
-        .restaurants-hero p{
-
-            max-width:700px;
-
-            line-height:1.9;
-
-            position:relative;
-            z-index:2;
-
-            font-size:1.05rem;
+        .open-badge{
+            position:absolute;top:12px;left:12px;
+            padding:0.3rem 0.7rem;border-radius:20px;font-size:0.75rem;font-weight:700;
         }
-
-        .search-box{
-
-            width:90%;
-
-            margin:0 auto 45px;
+        .open-badge.open{background:rgba(0,208,132,0.2);border:1px solid rgba(0,208,132,0.5);color:var(--green);}
+        .open-badge.closed{background:rgba(255,100,100,0.2);border:1px solid rgba(255,100,100,0.4);color:#ff6464;}
+        .rest-body{padding:1.2rem;}
+        .rest-meta{display:flex;gap:0.6rem;margin-bottom:0.6rem;flex-wrap:wrap;}
+        .rest-cat{font-size:0.72rem;padding:0.2rem 0.6rem;border-radius:10px;background:rgba(0,247,255,0.08);color:var(--neon-cyan);border:1px solid rgba(0,247,255,0.2);font-weight:600;}
+        .rest-time{font-size:0.72rem;padding:0.2rem 0.6rem;border-radius:10px;background:rgba(255,140,66,0.1);color:var(--orange);border:1px solid rgba(255,140,66,0.2);font-weight:600;}
+        .rest-name{font-size:1.1rem;font-weight:700;margin-bottom:0.4rem;}
+        .rest-desc{font-size:0.82rem;color:var(--text-secondary);margin-bottom:1rem;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+        .btn-menu{
+            display:block;width:100%;text-align:center;
+            padding:0.65rem;border-radius:10px;
+            background:linear-gradient(135deg,var(--neon-cyan),#00b8c8);
+            color:#050816;font-weight:700;font-size:0.88rem;
+            text-decoration:none;transition:opacity 0.3s;
         }
-
-        .search-box input{
-
-            width:100%;
-
-            padding:20px 24px;
-
-            border:none;
-
-            border-radius:20px;
-
-            background:white;
-
-            box-shadow:
-            0 10px 30px rgba(0,0,0,0.05);
-
-            font-size:1rem;
-
-            transition:0.3s;
-        }
-
-        .search-box input:focus{
-
-            outline:none;
-
-            border:2px solid #ff6b35;
-        }
-
-        .restaurant-grid{
-
-            width:90%;
-
-            margin:auto auto 100px;
-
-            display:grid;
-
-            grid-template-columns:
-            repeat(auto-fit,minmax(340px,1fr));
-
-            gap:35px;
-        }
-
-        .restaurant-card{
-
-            background:
-            rgba(255,255,255,0.85);
-
-            backdrop-filter:blur(10px);
-
-            border-radius:32px;
-
-            overflow:hidden;
-
-            position:relative;
-
-            box-shadow:
-            0 10px 30px rgba(0,0,0,0.08);
-
-            transition:0.4s;
-
-            border:1px solid rgba(255,255,255,0.4);
-        }
-
-        .restaurant-card:hover{
-
-            transform:
-            translateY(-12px)
-            scale(1.02);
-
-            box-shadow:
-            0 20px 40px rgba(255,107,53,0.15);
-        }
-
-        .restaurant-image{
-
-            position:relative;
-
-            overflow:hidden;
-        }
-
-        .restaurant-image img{
-
-            width:100%;
-
-            height:250px;
-
-            object-fit:cover;
-
-            transition:0.5s;
-        }
-
-        .restaurant-card:hover img{
-
-            transform:scale(1.08);
-        }
-
-        .restaurant-badge{
-
-            position:absolute;
-
-            top:20px;
-            left:20px;
-
-            background:white;
-
-            color:#ff6b35;
-
-            padding:8px 16px;
-
-            border-radius:30px;
-
-            font-size:0.9rem;
-
-            font-weight:700;
-
-            box-shadow:
-            0 5px 15px rgba(0,0,0,0.08);
-        }
-
-        .restaurant-content{
-
-            padding:28px;
-        }
-
-        .restaurant-content h3{
-
-            font-size:1.7rem;
-
-            margin-bottom:14px;
-
-            color:#111827;
-        }
-
-        .restaurant-location{
-
-            color:#6b7280;
-
-            margin-bottom:22px;
-
-            line-height:1.7;
-        }
-
-        .restaurant-info{
-
-            display:flex;
-
-            justify-content:space-between;
-
-            align-items:center;
-
-            margin-bottom:25px;
-
-            flex-wrap:wrap;
-
-            gap:10px;
-        }
-
-        .rating{
-
-            background:#fff1e8;
-
-            color:#ff6b35;
-
-            padding:8px 16px;
-
-            border-radius:30px;
-
-            font-size:0.9rem;
-
-            font-weight:700;
-        }
-
-        .delivery{
-
-            color:#6b7280;
-
-            font-size:0.95rem;
-        }
-
-        .primary-btn{
-
-            background:
-            linear-gradient(
-                135deg,
-                #ff6b35,
-                #ff9f1c
-            );
-
-            color:white;
-
-            padding:14px 24px;
-
-            border-radius:14px;
-
-            text-decoration:none;
-
-            display:inline-block;
-
-            font-weight:600;
-
-            transition:0.3s;
-
-            box-shadow:
-            0 10px 25px rgba(255,107,53,0.25);
-        }
-
-        .primary-btn:hover{
-
-            transform:
-            translateY(-4px);
-        }
-
-        .empty-restaurants{
-
-            text-align:center;
-
-            padding:100px 20px;
-        }
-
-        .empty-restaurants img{
-
-            width:220px;
-
-            margin-bottom:25px;
-        }
-
-        .empty-restaurants h2{
-
-            margin-bottom:15px;
-
-            color:#111827;
-        }
-
-        .empty-restaurants p{
-
-            color:#6b7280;
-        }
-
-        @media(max-width:768px){
-
-            .restaurants-hero{
-
-                padding:45px 25px;
-            }
-
-            .restaurants-hero h1{
-
-                font-size:2.5rem;
-            }
-
-            .restaurant-grid{
-
-                width:95%;
-            }
-        }
-
+        .btn-menu:hover{opacity:0.85;}
+
+        /* EMPTY STATE */
+        .empty-state{text-align:center;padding:5rem 2rem;color:var(--text-secondary);grid-column:1/-1;}
+        .empty-state .empty-icon{font-size:4rem;margin-bottom:1rem;}
+        .empty-state h3{font-size:1.3rem;color:var(--text-primary);margin-bottom:0.5rem;}
+        .empty-state p{font-size:0.9rem;}
     </style>
-
 </head>
-
 <body>
+<?php include '../includes/navbar.php'; ?>
 
-<div class="restaurants-hero">
-
-    <h1>
-
-        Explore Restaurants 🍔
-
-    </h1>
-
-    <p>
-
-        Discover delicious meals from
-        premium restaurants near your campus
-        and enjoy seamless online ordering.
-
-    </p>
-
-</div>
-
-<div class="search-box">
-
-    <input
-        type="text"
-        id="searchInput"
-        placeholder="Search restaurants..."
-    >
-
-</div>
-
-<?php
-
-if(mysqli_num_rows($result) > 0){
-?>
-
-<div class="restaurant-grid" id="restaurantGrid">
-
-<?php
-while($row = mysqli_fetch_assoc($result)){
-?>
-
-<div class="restaurant-card">
-
-    <div class="restaurant-image">
-
-        <img
-        src="../assets/images/restaurants/<?php echo $row['image']; ?>"
-        alt="<?php echo $row['restaurant_name']; ?>"
+<!-- HERO -->
+<section class="page-hero">
+    <h1>Explore <span>Restaurants</span> 🍴</h1>
+    <p>Discover the best food spots near you</p>
+    <form class="search-form" method="GET" action="restaurants.php" id="restaurant-search-form">
+        <?php if ($category): ?>
+            <input type="hidden" name="category" value="<?= htmlspecialchars($category) ?>">
+        <?php endif; ?>
+        <input
+            type="text"
+            name="search"
+            id="search-input"
+            class="search-input"
+            placeholder="Search restaurants, cuisines…"
+            value="<?= htmlspecialchars($search) ?>"
+            autocomplete="off"
         >
+        <button type="submit" class="btn-search" id="search-btn">🔍 Search</button>
+    </form>
+</section>
 
-        <div class="restaurant-badge">
-
-            Popular
-
-        </div>
-
-    </div>
-
-    <div class="restaurant-content">
-
-        <h3>
-
-            <?php
-            echo $row['restaurant_name'];
-            ?>
-
-        </h3>
-
-        <p class="restaurant-location">
-
-            📍 <?php
-            echo $row['location'];
-            ?>
-
-        </p>
-
-        <div class="restaurant-info">
-
-            <div class="rating">
-
-                ⭐ 4.5 Rating
-
-            </div>
-
-            <div class="delivery">
-
-                ⏱ 20-30 mins
-
-            </div>
-
-        </div>
-
-        <a href="menu.php?id=<?php
-           echo $row['id'];
-           ?>"
-           class="primary-btn">
-
-           View Menu
-
+<!-- FILTER PILLS -->
+<div class="filters-wrap">
+    <?php foreach ($categories as $cat): ?>
+        <?php
+        $is_active = ($category === $cat) || ($cat === 'All' && $category === '');
+        $href = 'restaurants.php?' . ($search ? 'search=' . urlencode($search) . '&' : '') . ($cat !== 'All' ? 'category=' . urlencode($cat) : '');
+        ?>
+        <a href="<?= $href ?>" class="filter-pill <?= $is_active ? 'active' : '' ?>" id="filter-<?= strtolower(str_replace(' ','-',$cat)) ?>">
+            <?= htmlspecialchars($cat) ?>
         </a>
+    <?php endforeach; ?>
+</div>
 
+<!-- RESULTS META -->
+<div class="results-meta">
+    <?php $count = count($restaurants); ?>
+    Showing <strong><?= $count ?></strong> restaurant<?= $count !== 1 ? 's' : '' ?>
+    <?= $search ? ' for "<strong>' . htmlspecialchars($search) . '</strong>"' : '' ?>
+    <?= ($category && $category !== 'All') ? ' in <strong>' . htmlspecialchars($category) . '</strong>' : '' ?>
+</div>
+
+<!-- GRID -->
+<div class="restaurants-grid">
+    <?php if (empty($restaurants)): ?>
+    <div class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <h3>No restaurants found</h3>
+        <p>Try adjusting your search or filters.</p>
     </div>
-
+    <?php else: ?>
+        <?php foreach ($restaurants as $i => $r): ?>
+        <?php $open = is_open($r['opening_time'] ?? '09:00', $r['closing_time'] ?? '22:00'); ?>
+        <div class="rest-card" style="animation-delay:<?= $i * 0.07 ?>s;">
+            <div class="rest-img-wrap">
+                <?php if (!empty($r['image'])): ?>
+                    <img src="../<?= htmlspecialchars($r['image']) ?>" alt="<?= htmlspecialchars($r['name']) ?>" class="rest-img" loading="lazy">
+                <?php else: ?>
+                    <div class="rest-img-placeholder">🏪</div>
+                <?php endif; ?>
+                <span class="rating-badge">⭐ <?= number_format($r['avg_rating'], 1) ?> (<?= (int)$r['review_count'] ?>)</span>
+                <span class="open-badge <?= $open ? 'open' : 'closed' ?>"><?= $open ? '● Open' : '● Closed' ?></span>
+            </div>
+            <div class="rest-body">
+                <div class="rest-meta">
+                    <span class="rest-cat"><?= htmlspecialchars($r['category']) ?></span>
+                    <span class="rest-time">⏱ <?= htmlspecialchars($r['delivery_time'] ?? '30') ?> min</span>
+                </div>
+                <div class="rest-name"><?= htmlspecialchars($r['name']) ?></div>
+                <div class="rest-desc"><?= htmlspecialchars($r['description'] ?? '') ?></div>
+                <a href="menu.php?id=<?= (int)$r['id'] ?>" class="btn-menu" id="view-menu-<?= (int)$r['id'] ?>">View Menu →</a>
+            </div>
+        </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
 </div>
-
-<?php } ?>
-
-</div>
-
-<?php } else { ?>
-
-<div class="empty-restaurants">
-
-    <img
-    src="../assets/images/icons/empty-cart.png"
-    alt="No Restaurants"
-    >
-
-    <h2>
-
-        No Restaurants Found
-
-    </h2>
-
-    <p>
-
-        Restaurants will appear here
-        once added by admin.
-
-    </p>
-
-</div>
-
-<?php } ?>
 
 <?php include '../includes/footer.php'; ?>
-
-<script>
-
-/* =========================
-   SEARCH RESTAURANTS
-========================= */
-
-const searchInput =
-document.getElementById('searchInput');
-
-searchInput.addEventListener('keyup', () => {
-
-    const filter =
-    searchInput.value.toLowerCase();
-
-    const cards =
-    document.querySelectorAll('.restaurant-card');
-
-    cards.forEach(card => {
-
-        const text =
-        card.innerText.toLowerCase();
-
-        card.style.display =
-        text.includes(filter)
-        ? 'block'
-        : 'none';
-    });
-});
-
-</script>
-
+<script src="../assets/js/main.js"></script>
+<script src="../assets/js/cart.js"></script>
 </body>
 </html>

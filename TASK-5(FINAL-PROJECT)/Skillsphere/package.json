@@ -1,0 +1,16 @@
+{
+  "name": "skillsphere",
+  "version": "1.0.0",
+  "description": "SkillSphere learning platform layout assets",
+  "main": "assets/js/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "keywords": [
+    "lms",
+    "elearning",
+    "dashboard"
+  ],
+  "author": "SkillSphere Team",
+  "license": "MIT"
+}

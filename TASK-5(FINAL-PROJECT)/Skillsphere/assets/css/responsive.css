@@ -1,0 +1,109 @@
+/* SkillSphere — Responsive */
+
+@media (max-width: 1024px) {
+  .hero__grid,
+  .about-grid,
+  .course-details-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-10);
+  }
+
+  .hero__visual { order: -1; max-width: 560px; margin-inline: auto; }
+
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-8);
+  }
+}
+
+@media (max-width: 768px) {
+  .menu-toggle { display: flex; }
+
+  .nav-main,
+  .nav-links {
+    position: fixed;
+    top: calc(var(--header-height) + var(--space-2));
+    left: var(--space-4);
+    right: var(--space-4);
+    flex-direction: column;
+    align-items: stretch;
+    padding: var(--space-4);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-xl);
+    display: none;
+    z-index: var(--z-dropdown);
+  }
+
+  .nav-main.active,
+  .nav-links.active {
+    display: flex;
+  }
+
+  .nav-main a,
+  .nav-links a {
+    padding: var(--space-4);
+    width: 100%;
+  }
+
+  .nav-actions {
+    gap: var(--space-2);
+  }
+
+  .nav-actions .btn-ghost:not(.theme-toggle) {
+    display: none;
+  }
+
+  .hero {
+    min-height: auto;
+    padding-bottom: var(--space-12);
+  }
+
+  .hero__actions { flex-direction: column; }
+  .hero__actions .btn { width: 100%; }
+
+  .section { padding-block: var(--space-12); }
+
+  .footer-grid { grid-template-columns: 1fr; }
+
+  .footer-bottom { flex-direction: column; text-align: center; }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: var(--space-4);
+  }
+
+  .sidebar-profile { display: none; }
+
+  .sidebar-menu {
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .dashboard { flex-direction: column; }
+
+  .main-content { padding: var(--space-6); }
+}
+
+@media (max-width: 480px) {
+  .course-grid,
+  .courses-carousel {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-cards,
+  .stats-strip .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+  }
+
+  .social-login { grid-template-columns: 1fr; }
+
+  .cta-banner { padding: var(--space-10) var(--space-6); }
+}
