@@ -473,7 +473,7 @@ $stats = [
             <?php if ($restaurants): foreach ($restaurants as $i => $r): ?>
             <div class="rest-card" data-reveal="up" data-delay="<?= $i * 0.1 ?>s">
                 <div style="overflow:hidden">
-                    <img src="assets/images/restaurants/<?= e($r['image'] ?? 'rest1.jpg') ?>"
+                    <img src="<?= e($r['image'] ?: 'assets/images/restaurants/rest1.jpg') ?>"
                          alt="<?= e($r['restaurant_name']) ?>"
                          onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&q=80'">
                 </div>
