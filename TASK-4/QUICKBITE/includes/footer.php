@@ -11,7 +11,7 @@ $base = $depth > 0 ? str_repeat('../', $depth) : '';
 
         <!-- Brand -->
         <div class="footer-brand">
-            <a href="<?= $base ?>index.php" class="logo">Quick<span style="color:#00F7FF">Bite</span></a>
+            <a href="<?= $base ?>index.php" class="logo">Quick<span style="color:#FF4747">Bite</span></a>
             <p>Order Fast, Eat Fresh 🍔<br>
             QuickBite is a modern food ordering platform designed for fast, easy, and seamless restaurant ordering experiences.</p>
             <div class="footer-social">

@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Rate limiting: 5 attempts per 15 minutes
         $rate_key = 'login_' . md5($_SERVER['REMOTE_ADDR'] . $email);
-        if (check_rate_limit($rate_key, 5, 900)) {
+        if (!check_rate_limit($rate_key, 5, 900)) {
             $error = 'Too many login attempts. Please wait 15 minutes before trying again.';
         } elseif (empty($email) || empty($password)) {
             $error = 'Please fill in all fields.';
@@ -98,14 +98,14 @@ $csrf_token = generate_csrf_token();
     <link rel="stylesheet" href="../assets/css/animations.css">
     <style>
         :root {
-            --neon-cyan: #00F7FF;
-            --bg-dark: #050816;
-            --bg-secondary: #0B1020;
-            --bg-card: rgba(255, 255, 255, 0.04);
-            --text-primary: #F0F4FF;
-            --text-secondary: #94A3B8;
-            --grad-primary: linear-gradient(135deg, #00F7FF, #3A86FF);
-            --border-glass: rgba(255, 255, 255, 0.08);
+            --neon-cyan: #FF5A00;
+            --bg-dark: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --bg-card: #FFFFFF;
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --grad-primary: linear-gradient(135deg, #FF5A00, #FF8C42);
+            --border-glass: #E2E8F0;
             --error-red: #FF4D6D;
             --success-green: #00D97E;
         }
@@ -115,7 +115,7 @@ $csrf_token = generate_csrf_token();
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg-dark);
-            color: var(--text-primary);
+            color: #0F172A;
             min-height: 100vh;
             display: flex;
             overflow: hidden;
@@ -124,7 +124,7 @@ $csrf_token = generate_csrf_token();
         /* ── LEFT PANEL ── */
         .auth-left {
             flex: 1;
-            background: linear-gradient(145deg, #050816 0%, #0a1628 40%, #0d1f3c 100%);
+            background: linear-gradient(145deg, #F8FAFC 0%, #0a1628 40%, #0d1f3c 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -132,13 +132,14 @@ $csrf_token = generate_csrf_token();
             padding: 60px 50px;
             position: relative;
             overflow: hidden;
+            color: #FFFFFF;
         }
 
         .auth-left::before {
             content: '';
             position: absolute;
             width: 500px; height: 500px;
-            background: radial-gradient(circle, rgba(0,247,255,0.12) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(255,71,71,0.12) 0%, transparent 70%);
             top: -100px; left: -100px;
             border-radius: 50%;
             animation: pulseGlow 4s ease-in-out infinite;
@@ -174,7 +175,7 @@ $csrf_token = generate_csrf_token();
             border-radius: 16px;
             display: flex; align-items: center; justify-content: center;
             font-size: 28px;
-            box-shadow: 0 0 30px rgba(0,247,255,0.4);
+            box-shadow: 0 0 30px rgba(255,90,0,0.4);
         }
 
         .brand-logo-text {
@@ -188,7 +189,7 @@ $csrf_token = generate_csrf_token();
 
         .brand-tagline {
             font-size: 16px;
-            color: var(--text-secondary);
+            color: #E2E8F0;
             font-weight: 400;
             letter-spacing: 0.5px;
             position: relative;
@@ -201,7 +202,7 @@ $csrf_token = generate_csrf_token();
             position: relative;
             z-index: 1;
             animation: floatEmoji 3s ease-in-out infinite;
-            filter: drop-shadow(0 0 30px rgba(0,247,255,0.3));
+            filter: drop-shadow(0 0 30px rgba(255,90,0,0.3));
         }
 
         @keyframes floatEmoji {
@@ -217,11 +218,12 @@ $csrf_token = generate_csrf_token();
             margin-bottom: 12px;
             position: relative;
             z-index: 1;
+            color: #FFFFFF;
         }
 
         .hero-subtext {
             font-size: 15px;
-            color: var(--text-secondary);
+            color: #CBD5E1;
             text-align: center;
             max-width: 320px;
             position: relative;
@@ -313,7 +315,7 @@ $csrf_token = generate_csrf_token();
             border: 1px solid var(--border-glass);
             border-radius: 20px;
             padding: 32px;
-            backdrop-filter: blur(20px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
         }
 
         /* Alert */
@@ -373,11 +375,11 @@ $csrf_token = generate_csrf_token();
 
         .form-input {
             width: 100%;
-            background: rgba(255,255,255,0.04);
+            background: #F8FAFC;
             border: 1px solid var(--border-glass);
             border-radius: 12px;
             padding: 13px 16px 13px 44px;
-            color: var(--text-primary);
+            color: #0F172A;
             font-family: 'Inter', sans-serif;
             font-size: 14px;
             transition: border-color 0.2s, box-shadow 0.2s;
@@ -386,10 +388,10 @@ $csrf_token = generate_csrf_token();
 
         .form-input:focus {
             border-color: var(--neon-cyan);
-            box-shadow: 0 0 0 3px rgba(0,247,255,0.1);
+            box-shadow: 0 0 0 3px rgba(255,90,0,0.15);
         }
 
-        .form-input::placeholder { color: rgba(148,163,184,0.5); }
+        .form-input::placeholder { color: rgba(148,163,184,0.7); }
 
         .toggle-password {
             position: absolute;
@@ -448,19 +450,19 @@ $csrf_token = generate_csrf_token();
             background: var(--grad-primary);
             border: none;
             border-radius: 12px;
-            color: #050816;
+            color: #FFFFFF;
             font-family: 'Inter', sans-serif;
             font-size: 15px;
             font-weight: 700;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
-            box-shadow: 0 4px 20px rgba(0,247,255,0.3);
+            box-shadow: 0 4px 20px rgba(255,90,0,0.3);
             letter-spacing: 0.3px;
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(0,247,255,0.5);
+            box-shadow: 0 8px 30px rgba(255,90,0,0.5);
         }
 
         .btn-primary:active { transform: translateY(0); }

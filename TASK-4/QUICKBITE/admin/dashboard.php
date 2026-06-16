@@ -30,6 +30,7 @@ $stat_revenue      = (float) fetchSingleValue($conn, "SELECT COALESCE(SUM(total_
 $stat_today_orders = (int) fetchSingleValue($conn, "SELECT COUNT(*) FROM orders WHERE DATE(created_at)=CURDATE()");
 $stat_pending      = (int) fetchSingleValue($conn, "SELECT COUNT(*) FROM orders WHERE order_status='Pending'");
 $stat_delivered    = (int) fetchSingleValue($conn, "SELECT COUNT(*) FROM orders WHERE order_status='Delivered'");
+$stat_app_rating   = (float) fetchSingleValue($conn, "SELECT COALESCE(AVG(rating),0) FROM app_reviews");
 
 /* ──────────────────────────────────────────
    LAST 7 DAYS — REVENUE & ORDERS
@@ -95,7 +96,7 @@ for ($i = 5; $i >= 0; $i--) {
    TOP 5 FOODS BY ORDER COUNT
 ─────────────────────────────────────────── */
 $food_res = $conn->query(
-    "SELECT f.name, COUNT(oi.id) as total_orders
+    "SELECT f.food_name AS name, COUNT(oi.id) as total_orders
      FROM order_items oi
      JOIN foods f ON oi.food_id = f.id
      GROUP BY oi.food_id
@@ -152,13 +153,13 @@ $food_data_json       = json_encode($food_data);
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     <style>
         :root {
-            --neon-cyan: #00F7FF;
-            --bg-dark: #050816;
-            --bg-secondary: #0B1020;
+            --neon-cyan: #FF5A00;
+            --bg-dark: #F8FAFC;
+            --bg-secondary: #FFFFFF;
             --bg-card: rgba(255, 255, 255, 0.04);
-            --text-primary: #F0F4FF;
-            --text-secondary: #94A3B8;
-            --grad-primary: linear-gradient(135deg, #00F7FF, #3A86FF);
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --grad-primary: linear-gradient(135deg, #FF4747, #3A86FF);
             --border-glass: rgba(255, 255, 255, 0.08);
             --sidebar-w: 260px;
         }
@@ -169,7 +170,7 @@ $food_data_json       = json_encode($food_data);
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg-dark);
-            color: var(--text-primary);
+            color: #0F172A;
             display: flex;
         }
 
@@ -203,7 +204,7 @@ $food_data_json       = json_encode($food_data);
             border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
             font-size: 20px;
-            box-shadow: 0 0 20px rgba(0,247,255,0.3);
+            box-shadow: 0 0 20px rgba(255,71,71,0.3);
         }
 
         .sidebar-logo-text {
@@ -224,7 +225,7 @@ $food_data_json       = json_encode($food_data);
             background: var(--grad-primary);
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-size: 18px; font-weight: 700; color: #050816;
+            font-size: 18px; font-weight: 700; color: #F8FAFC;
             flex-shrink: 0;
         }
 
@@ -248,13 +249,13 @@ $food_data_json       = json_encode($food_data);
 
         .nav-item:hover {
             background: rgba(255,255,255,0.06);
-            color: var(--text-primary);
+            color: #0F172A;
         }
 
         .nav-item.active {
-            background: rgba(0,247,255,0.1);
+            background: rgba(255,71,71,0.1);
             color: var(--neon-cyan);
-            border: 1px solid rgba(0,247,255,0.2);
+            border: 1px solid rgba(255,71,71,0.2);
         }
 
         .nav-item.active::before {
@@ -308,13 +309,13 @@ $food_data_json       = json_encode($food_data);
             border: 1px solid var(--border-glass);
             border-radius: 8px;
             padding: 8px 10px;
-            color: var(--text-primary);
+            color: #0F172A;
             cursor: pointer; font-size: 18px;
             display: none;
             transition: background 0.2s;
         }
 
-        #sidebarToggle:hover { background: rgba(0,247,255,0.1); }
+        #sidebarToggle:hover { background: rgba(255,71,71,0.1); }
 
         .topbar-title { font-size: 17px; font-weight: 700; flex: 1; }
 
@@ -327,7 +328,7 @@ $food_data_json       = json_encode($food_data);
             border: 1px solid var(--border-glass);
             border-radius: 10px;
             padding: 8px 16px 8px 36px;
-            color: var(--text-primary);
+            color: #0F172A;
             font-family: 'Inter', sans-serif;
             font-size: 13px;
             width: 220px;
@@ -355,13 +356,13 @@ $food_data_json       = json_encode($food_data);
             border: 1px solid var(--border-glass);
             border-radius: 10px;
             padding: 8px 12px;
-            color: var(--text-primary);
+            color: #0F172A;
             cursor: pointer; font-size: 18px;
             position: relative;
             transition: background 0.2s;
         }
 
-        .notif-btn:hover { background: rgba(0,247,255,0.08); }
+        .notif-btn:hover { background: rgba(255,71,71,0.08); }
 
         .notif-badge {
             position: absolute; top: -4px; right: -4px;
@@ -404,8 +405,8 @@ $food_data_json       = json_encode($food_data);
 
         /* Welcome */
         .welcome-widget {
-            background: linear-gradient(135deg, rgba(0,247,255,0.08), rgba(58,134,255,0.08));
-            border: 1px solid rgba(0,247,255,0.15);
+            background: linear-gradient(135deg, rgba(255,71,71,0.08), rgba(58,134,255,0.08));
+            border: 1px solid rgba(255,71,71,0.15);
             border-radius: 16px; padding: 20px 24px;
             margin-bottom: 24px;
             display: flex; align-items: center; justify-content: space-between;
@@ -413,7 +414,7 @@ $food_data_json       = json_encode($food_data);
 
         .welcome-title { font-size: 20px; font-weight: 700; }
         .welcome-date { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
-        .welcome-badge { background: var(--grad-primary); color: #050816; font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 20px; }
+        .welcome-badge { background: var(--grad-primary); color: #F8FAFC; font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 20px; }
 
         /* Stats grid */
         .stats-grid {
@@ -432,14 +433,14 @@ $food_data_json       = json_encode($food_data);
             position: relative; overflow: hidden;
         }
 
-        .stat-card:hover { transform: translateY(-3px); border-color: rgba(0,247,255,0.2); }
+        .stat-card:hover { transform: translateY(-3px); border-color: rgba(255,71,71,0.2); }
 
         .stat-card::before {
             content: '';
             position: absolute; top: 0; left: 0; right: 0; height: 2px;
         }
 
-        .stat-card.c1::before { background: linear-gradient(90deg,#00F7FF,#3A86FF); }
+        .stat-card.c1::before { background: linear-gradient(90deg,#FF4747,#3A86FF); }
         .stat-card.c2::before { background: linear-gradient(90deg,#7C3AED,#DB2777); }
         .stat-card.c3::before { background: linear-gradient(90deg,#F59E0B,#EF4444); }
         .stat-card.c4::before { background: linear-gradient(90deg,#10B981,#059669); }
@@ -506,7 +507,7 @@ $food_data_json       = json_encode($food_data);
             background: var(--grad-primary);
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-size: 14px; font-weight: 700; color: #050816;
+            font-size: 14px; font-weight: 700; color: #F8FAFC;
             flex-shrink: 0;
         }
 
@@ -521,7 +522,7 @@ $food_data_json       = json_encode($food_data);
         .badge-delivered { background: rgba(0,217,126,0.15); color: #00D97E; }
         .badge-pending   { background: rgba(249,115,22,0.15); color: #F97316; }
         .badge-cancelled { background: rgba(255,77,109,0.15); color: #FF4D6D; }
-        .badge-processing{ background: rgba(0,247,255,0.15); color: var(--neon-cyan); }
+        .badge-processing{ background: rgba(255,71,71,0.15); color: var(--neon-cyan); }
         .badge-default   { background: rgba(255,255,255,0.06); color: var(--text-secondary); }
 
         .order-price { font-size: 14px; font-weight: 700; color: var(--neon-cyan); }
@@ -705,12 +706,18 @@ $food_data_json       = json_encode($food_data);
                 <div class="stat-value" data-target="<?= $stat_delivered ?>" id="ctr-delivered">0</div>
                 <div class="stat-label">Delivered Orders</div>
             </div>
+            <div class="stat-card c9" style="border-color: rgba(255,184,0,0.4);">
+                <div class="stat-icon">⭐</div>
+                <div class="stat-value"><?= number_format($stat_app_rating, 1) ?></div>
+                <div class="stat-label">App Rating (Out of 5)</div>
+            </div>
         </div>
+
 
         <!-- Charts Grid -->
         <div class="charts-grid">
             <div class="chart-card">
-                <div class="chart-title"><span class="dot" style="background:#00F7FF;box-shadow:0 0 6px #00F7FF;"></span> Revenue (Last 7 Days)</div>
+                <div class="chart-title"><span class="dot" style="background:#FF4747;box-shadow:0 0 6px #FF4747;"></span> Revenue (Last 7 Days)</div>
                 <div class="chart-wrapper"><canvas id="revenueChart"></canvas></div>
             </div>
             <div class="chart-card">
@@ -841,10 +848,10 @@ $food_data_json       = json_encode($food_data);
                 datasets: [{
                     label: 'Revenue (₹)',
                     data,
-                    borderColor: '#00F7FF',
-                    backgroundColor: 'rgba(0,247,255,0.08)',
+                    borderColor: '#FF4747',
+                    backgroundColor: 'rgba(255,71,71,0.08)',
                     borderWidth: 2,
-                    pointBackgroundColor: '#00F7FF',
+                    pointBackgroundColor: '#FF4747',
                     pointRadius: 4,
                     fill: true,
                     tension: 0.4,
@@ -899,8 +906,8 @@ $food_data_json       = json_encode($food_data);
                 labels,
                 datasets: [{
                     data,
-                    backgroundColor: ['#00D97E','#F97316','#FF4D6D','#00F7FF','#7C3AED'],
-                    borderColor: '#050816',
+                    backgroundColor: ['#00D97E','#F97316','#FF4D6D','#FF4747','#7C3AED'],
+                    borderColor: '#F8FAFC',
                     borderWidth: 3,
                     hoverOffset: 8,
                 }]
@@ -959,12 +966,12 @@ $food_data_json       = json_encode($food_data);
                     data,
                     backgroundColor: [
                         'rgba(245,158,11,0.7)',
-                        'rgba(0,247,255,0.7)',
+                        'rgba(255,71,71,0.7)',
                         'rgba(58,134,255,0.7)',
                         'rgba(124,58,237,0.7)',
                         'rgba(16,185,129,0.7)',
                     ],
-                    borderColor: ['#F59E0B','#00F7FF','#3A86FF','#7C3AED','#10B981'],
+                    borderColor: ['#F59E0B','#FF4747','#3A86FF','#7C3AED','#10B981'],
                     borderWidth: 1,
                     borderRadius: 6,
                 }]

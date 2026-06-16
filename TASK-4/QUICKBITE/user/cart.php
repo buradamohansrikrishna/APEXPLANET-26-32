@@ -47,9 +47,9 @@ $grand_total = $subtotal + $delivery_fee + $tax - $coupon_discount;
     <link rel="stylesheet" href="../assets/css/responsive.css">
     <style>
         :root{
-            --neon-cyan:#00F7FF;--bg-dark:#050816;--bg-secondary:#0B1020;
-            --bg-card:rgba(255,255,255,0.04);--text-primary:#F0F4FF;--text-secondary:#94A3B8;
-            --border-glass:rgba(255,255,255,0.08);--neon-glow:0 0 20px rgba(0,247,255,0.3);
+            --neon-cyan:#FF5A00;--bg-dark:#F8FAFC;--bg-secondary:#FFFFFF;
+            --bg-card:#FFFFFF;--text-primary:#0F172A;--text-secondary:#475569;
+            --border-glass:#E2E8F0;--neon-glow:0 0 20px rgba(255,71,71,0.3);
             --green:#00D084;--orange:#FF8C42;--red:#FF4545;
         }
         *{margin:0;padding:0;box-sizing:border-box;}
@@ -57,7 +57,7 @@ $grand_total = $subtotal + $delivery_fee + $tax - $coupon_discount;
 
         /* PAGE HEADER */
         .page-header{
-            background:linear-gradient(135deg,#050816,#0a1a3e);
+            background:linear-gradient(135deg,#F8FAFC,#F1F5F9);
             padding:3rem 2rem 2.5rem;text-align:center;
             border-bottom:1px solid var(--border-glass);
         }
@@ -75,9 +75,9 @@ $grand_total = $subtotal + $delivery_fee + $tax - $coupon_discount;
             display:flex;gap:1.2rem;align-items:center;
             transition:all 0.3s ease;
         }
-        .cart-item:hover{border-color:rgba(0,247,255,0.2);}
+        .cart-item:hover{border-color:rgba(255,71,71,0.2);}
         .item-img{width:80px;height:80px;border-radius:12px;object-fit:cover;flex-shrink:0;}
-        .item-img-placeholder{width:80px;height:80px;border-radius:12px;background:linear-gradient(135deg,#0B1020,#0d1a40);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0;}
+        .item-img-placeholder{width:80px;height:80px;border-radius:12px;background:linear-gradient(135deg,#FFFFFF,#0d1a40);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0;}
         .item-info{flex:1;min-width:0;}
         .item-name{font-size:0.98rem;font-weight:700;margin-bottom:0.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
         .item-cat{font-size:0.72rem;color:var(--neon-cyan);margin-bottom:0.5rem;}
@@ -89,7 +89,7 @@ $grand_total = $subtotal + $delivery_fee + $tax - $coupon_discount;
             color:var(--text-primary);font-size:1rem;font-weight:700;cursor:pointer;
             display:flex;align-items:center;justify-content:center;transition:all 0.2s;
         }
-        .qty-btn:hover{background:rgba(0,247,255,0.12);border-color:var(--neon-cyan);color:var(--neon-cyan);}
+        .qty-btn:hover{background:rgba(255,71,71,0.12);border-color:var(--neon-cyan);color:var(--neon-cyan);}
         .qty-display{
             width:36px;text-align:center;font-weight:700;font-size:0.95rem;
             background:rgba(255,255,255,0.04);border:1px solid var(--border-glass);
@@ -116,7 +116,7 @@ $grand_total = $subtotal + $delivery_fee + $tax - $coupon_discount;
         .summary-row.discount{color:var(--green);}
         .summary-row.total{font-size:1.1rem;font-weight:800;border-top:1px solid var(--border-glass);padding-top:1rem;margin-top:0.5rem;}
         .summary-row span:last-child{font-weight:600;}
-        .coupon-section{margin:1rem 0;padding:1rem;background:rgba(255,255,255,0.03);border:1px dashed rgba(0,247,255,0.2);border-radius:12px;}
+        .coupon-section{margin:1rem 0;padding:1rem;background:rgba(255,255,255,0.03);border:1px dashed rgba(255,71,71,0.2);border-radius:12px;}
         .coupon-label{font-size:0.8rem;color:var(--text-secondary);margin-bottom:0.6rem;font-weight:600;}
         .coupon-row{display:flex;gap:0.5rem;}
         .coupon-input{
@@ -128,20 +128,20 @@ $grand_total = $subtotal + $delivery_fee + $tax - $coupon_discount;
         .coupon-input:focus{border-color:var(--neon-cyan);}
         .coupon-input::placeholder{color:var(--text-secondary);}
         .btn-apply{
-            padding:0.55rem 0.9rem;background:rgba(0,247,255,0.12);
-            border:1px solid rgba(0,247,255,0.3);border-radius:8px;
+            padding:0.55rem 0.9rem;background:rgba(255,71,71,0.12);
+            border:1px solid rgba(255,71,71,0.3);border-radius:8px;
             color:var(--neon-cyan);font-size:0.82rem;font-weight:700;cursor:pointer;
             transition:all 0.25s;white-space:nowrap;
         }
-        .btn-apply:hover{background:rgba(0,247,255,0.2);}
+        .btn-apply:hover{background:rgba(255,71,71,0.2);}
         #coupon-msg{font-size:0.78rem;margin-top:0.4rem;min-height:1em;}
         .btn-checkout{
             display:block;width:100%;text-align:center;
             padding:0.95rem;margin-top:1.5rem;
             background:linear-gradient(135deg,var(--neon-cyan),#00b8c8);
-            border:none;border-radius:12px;color:#050816;font-weight:800;font-size:1rem;
+            border:none;border-radius:12px;color:#0F172A;font-weight:800;font-size:1rem;
             cursor:pointer;text-decoration:none;transition:all 0.3s;
-            box-shadow:0 4px 20px rgba(0,247,255,0.25);
+            box-shadow:0 4px 20px rgba(255,71,71,0.25);
         }
         .btn-checkout:hover{opacity:0.9;transform:translateY(-2px);}
 
@@ -153,7 +153,7 @@ $grand_total = $subtotal + $delivery_fee + $tax - $coupon_discount;
         .btn-browse{
             display:inline-block;padding:0.8rem 2rem;
             background:linear-gradient(135deg,var(--neon-cyan),#00b8c8);
-            border-radius:12px;color:#050816;font-weight:700;text-decoration:none;transition:opacity 0.3s;
+            border-radius:12px;color:#0F172A;font-weight:700;text-decoration:none;transition:opacity 0.3s;
         }
         .btn-browse:hover{opacity:0.85;}
     </style>

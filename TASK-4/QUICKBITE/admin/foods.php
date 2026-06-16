@@ -71,7 +71,7 @@ if ($rest_filter > 0) {
 
 $where_sql = $where ? 'WHERE ' . implode(' AND ', $where) : '';
 
-$sql = "SELECT f.*, r.name AS restaurant_name
+$sql = "SELECT f.*, r.restaurant_name AS restaurant_name
         FROM foods f
         LEFT JOIN restaurants r ON f.restaurant_id = r.id
         {$where_sql}
@@ -85,7 +85,7 @@ $foods = $stmt->fetchAll();
 $categories = $pdo->query("SELECT DISTINCT category FROM foods WHERE category IS NOT NULL AND category != '' ORDER BY category")->fetchAll(PDO::FETCH_COLUMN);
 
 // Fetch restaurants for filter
-$restaurants = $pdo->query("SELECT id, name FROM restaurants ORDER BY name")->fetchAll();
+$restaurants = $pdo->query("SELECT id, restaurant_name AS name FROM restaurants ORDER BY restaurant_name")->fetchAll();
 
 $csrf_token  = generate_csrf_token();
 $flash       = get_flash_message();
@@ -106,9 +106,9 @@ $page_title  = 'Manage Foods';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root {
-            --bg-primary: #050816;
+            --bg-primary: #F8FAFC;
             --bg-secondary: #0a0f1e;
-            --bg-glass: rgba(255,255,255,0.05);
+            --bg-glass: #FFFFFF;
             --border-glass: rgba(255,255,255,0.1);
             --neon-orange: #ff6b2b;
             --neon-blue: #00d4ff;
@@ -120,7 +120,7 @@ $page_title  = 'Manage Foods';
             --warning: #f59e0b;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: #0F172A; min-height: 100vh; }
 
         /* SIDEBAR */
         .admin-wrapper { display: flex; min-height: 100vh; }
@@ -142,7 +142,7 @@ $page_title  = 'Manage Foods';
             border-radius: 10px; display: flex; align-items: center; justify-content: center;
             font-size: 18px;
         }
-        .sidebar-logo span { font-size: 1.2rem; font-weight: 700; color: var(--text-primary); }
+        .sidebar-logo span { font-size: 1.2rem; font-weight: 700; color: #0F172A; }
         .sidebar-logo span em { color: var(--neon-orange); font-style: normal; }
         .sidebar-nav { flex: 1; padding: 16px 0; overflow-y: auto; }
         .nav-section-label {
@@ -157,7 +157,7 @@ $page_title  = 'Manage Foods';
             border-left: 3px solid transparent;
             transition: all 0.2s;
         }
-        .nav-item:hover { color: var(--text-primary); background: rgba(255,255,255,0.05); }
+        .nav-item:hover { color: #0F172A; background: rgba(255,255,255,0.05); }
         .nav-item.active {
             color: var(--neon-orange); background: rgba(255,107,43,0.08);
             border-left-color: var(--neon-orange);
@@ -231,7 +231,7 @@ $page_title  = 'Manage Foods';
         }
         .filter-row input, .filter-row select {
             background: rgba(255,255,255,0.07); border: 1px solid var(--border-glass);
-            color: var(--text-primary); border-radius: 9px; padding: 9px 14px;
+            color: #0F172A; border-radius: 9px; padding: 9px 14px;
             font-size: 0.875rem; outline: none; transition: border 0.2s;
             font-family: 'Inter', sans-serif;
         }

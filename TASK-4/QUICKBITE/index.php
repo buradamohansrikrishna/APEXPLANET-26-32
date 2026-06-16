@@ -38,7 +38,7 @@ $stats = [
         padding: calc(var(--navbar-h) + 40px) 5% 80px;
         position: relative;
         overflow: hidden;
-        background: radial-gradient(ellipse 80% 60% at 50% -20%, rgba(0,247,255,0.12) 0%, transparent 60%),
+        background: radial-gradient(ellipse 80% 60% at 50% -20%, rgba(255,71,71,0.12) 0%, transparent 60%),
                     radial-gradient(ellipse 60% 50% at 80% 80%, rgba(157,78,221,0.08) 0%, transparent 60%);
     }
     .hero-grid {
@@ -59,9 +59,10 @@ $stats = [
         line-height: 1.1;
         margin-bottom: 24px;
     }
-    .hero-title .line1 { color: var(--text-primary); }
+    .hero-title .line1 { color: #0F172A; }
     .hero-title .line2 {
-        background: linear-gradient(90deg, #00F7FF, #3A86FF, #9D4EDD);
+        color: #FF4747;
+        background: linear-gradient(90deg, #FF4747, #3A86FF, #9D4EDD);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -104,8 +105,8 @@ $stats = [
         width: 460px;
         height: 460px;
         border-radius: 50%;
-        background: radial-gradient(circle, rgba(0,247,255,0.06) 0%, transparent 70%);
-        border: 1px solid rgba(0,247,255,0.12);
+        background: radial-gradient(circle, rgba(255,71,71,0.06) 0%, transparent 70%);
+        border: 1px solid rgba(255,71,71,0.12);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -143,7 +144,7 @@ $stats = [
     .hero-float-card:nth-child(3) { top: 50%; right: -30px; animation-delay: 0.8s; }
     .float-card-icon { font-size: 1.4rem; }
     .float-card-label { color: var(--text-muted); font-size: 0.72rem; }
-    .float-card-value { font-weight: 700; color: var(--text-primary); }
+    .float-card-value { font-weight: 700; color: #0F172A; }
 
     /* ── STATS SECTION ── */
     .stats-section { padding: 0 5% 80px; }
@@ -162,11 +163,12 @@ $stats = [
         padding: 32px 20px;
         transition: var(--transition-base);
     }
-    .stats-item:hover { border-color: rgba(0,247,255,0.3); transform: translateY(-4px); }
+    .stats-item:hover { border-color: rgba(255,71,71,0.3); transform: translateY(-4px); }
     .stats-num {
         font-family: var(--font-heading);
         font-size: 2.8rem;
         font-weight: 800;
+        color: #FF5A00;
         background: var(--grad-primary);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -193,8 +195,8 @@ $stats = [
         transition: var(--transition-base);
     }
     .category-card:hover {
-        border-color: rgba(0,247,255,0.4);
-        background: rgba(0,247,255,0.04);
+        border-color: rgba(255,71,71,0.4);
+        background: rgba(255,71,71,0.04);
         transform: translateY(-6px);
         box-shadow: var(--glow-cyan);
     }
@@ -210,9 +212,9 @@ $stats = [
         transition: var(--transition-base);
     }
     .rest-card:hover {
-        border-color: rgba(0,247,255,0.25);
+        border-color: rgba(255,71,71,0.25);
         transform: translateY(-6px);
-        box-shadow: 0 20px 40px rgba(0,247,255,0.06);
+        box-shadow: 0 20px 40px rgba(255,71,71,0.06);
     }
     .rest-card img {
         width: 100%; height: 200px;
@@ -251,7 +253,7 @@ $stats = [
         position: relative;
         transition: var(--transition-base);
     }
-    .hiw-card:hover { border-color: rgba(0,247,255,0.3); transform: translateY(-6px); }
+    .hiw-card:hover { border-color: rgba(255,71,71,0.3); transform: translateY(-6px); }
     .hiw-num {
         position: absolute;
         top: -16px; left: 50%; transform: translateX(-50%);
@@ -278,7 +280,7 @@ $stats = [
         padding: 28px;
         transition: var(--transition-base);
     }
-    .testi-card:hover { border-color: rgba(0,247,255,0.2); }
+    .testi-card:hover { border-color: rgba(255,71,71,0.2); }
     .testi-stars { color: #F59E0B; font-size: 0.95rem; margin-bottom: 14px; }
     .testi-text { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8; margin-bottom: 20px; font-style: italic; }
     .testi-author { display: flex; align-items: center; gap: 12px; }
@@ -297,8 +299,8 @@ $stats = [
     .cta-section {
         max-width: 1280px;
         margin: 0 auto 80px;
-        background: linear-gradient(135deg, rgba(0,247,255,0.08), rgba(157,78,221,0.08));
-        border: 1px solid rgba(0,247,255,0.2);
+        background: linear-gradient(135deg, rgba(255,71,71,0.08), rgba(157,78,221,0.08));
+        border: 1px solid rgba(255,71,71,0.2);
         border-radius: var(--radius-xl);
         padding: 80px 60px;
         text-align: center;
@@ -309,7 +311,7 @@ $stats = [
         content: '';
         position: absolute; top: -100px; right: -100px;
         width: 300px; height: 300px;
-        background: radial-gradient(circle, rgba(0,247,255,0.15) 0%, transparent 70%);
+        background: radial-gradient(circle, rgba(255,71,71,0.15) 0%, transparent 70%);
         pointer-events: none;
     }
     .cta-section::after {
@@ -601,7 +603,7 @@ $stats = [
     <div class="cta-section" data-reveal="up">
         <div class="section-badge" style="margin:0 auto 20px;display:inline-flex">🚀 Join QuickBite Today</div>
         <h2 class="cta-title">
-            Ready to <span style="background:var(--grad-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Order?</span>
+            Ready to <span style="color:#FF5A00; background:var(--grad-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Order?</span>
         </h2>
         <p class="cta-desc">Join over 1,000+ happy customers. Sign up free and get 20% off your first order with code WELCOME20.</p>
         <div class="cta-buttons">

@@ -86,7 +86,10 @@ async function updateQuantity(cartId, newQty, subtotalEl = null) {
         });
         const data = await res.json();
         if (data.success) {
-            if (subtotalEl) subtotalEl.textContent = '₹' + parseFloat(data.subtotal).toFixed(2);
+            if (subtotalEl) {
+                const itemSub = data.item_subtotal !== undefined ? data.item_subtotal : data.subtotal;
+                subtotalEl.textContent = '₹' + parseFloat(itemSub).toFixed(2);
+            }
             updateCartBadge(data.cart_count);
             updateCartTotals(data);
         }
@@ -95,13 +98,29 @@ async function updateQuantity(cartId, newQty, subtotalEl = null) {
 
 /* ── UPDATE TOTALS IN CART PAGE ─────────────── */
 function updateCartTotals(data) {
-    const totalEl = document.getElementById('cart-grand-total');
+    const totalEl = document.getElementById('cart-grand-total') || document.getElementById('summary-total');
     if (totalEl && data.total !== undefined) {
         totalEl.textContent = '₹' + parseFloat(data.total).toFixed(2);
     }
-    const subtotalEl = document.getElementById('cart-subtotal');
+    const subtotalEl = document.getElementById('cart-subtotal') || document.getElementById('summary-subtotal');
     if (subtotalEl && data.subtotal !== undefined) {
         subtotalEl.textContent = '₹' + parseFloat(data.subtotal).toFixed(2);
+    }
+    const taxEl = document.getElementById('summary-tax');
+    if (taxEl && data.tax !== undefined) {
+        taxEl.textContent = '₹' + parseFloat(data.tax).toFixed(2);
+    }
+    const deliveryEl = document.getElementById('summary-delivery');
+    if (deliveryEl && data.delivery_fee !== undefined) {
+        deliveryEl.textContent = '₹' + parseFloat(data.delivery_fee).toFixed(2);
+    }
+    const discountEl = document.getElementById('summary-discount') || document.getElementById('cart-discount');
+    if (discountEl && data.discount !== undefined) {
+        discountEl.textContent = '−₹' + parseFloat(data.discount).toFixed(2);
+        const discountRow = document.getElementById('discount-row');
+        if (discountRow) {
+            discountRow.style.display = parseFloat(data.discount) > 0 ? 'flex' : 'none';
+        }
     }
 }
 
@@ -175,13 +194,24 @@ function initQtyButtons() {
     document.querySelectorAll('.qty-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             const cartId    = this.dataset.cartId;
-            const isPlus    = this.dataset.action === 'plus';
-            const numEl     = this.closest('.qty-controls').querySelector('.qty-num');
-            const subtotEl  = this.closest('.cart-item')?.querySelector('.cart-item-subtotal');
-            let current     = parseInt(numEl?.textContent || 1);
+            const action    = this.dataset.action;
+            const isPlus    = action === 'plus' || action === 'increase';
+            
+            // Try different wrapper and display classes
+            const container = this.closest('.qty-controls') || this.closest('.item-controls') || this.closest('.cart-item');
+            const numEl     = container ? (container.querySelector('.qty-num') || container.querySelector('.qty-display') || document.getElementById('qty-' + cartId)) : null;
+            const subtotEl  = this.closest('.cart-item')?.querySelector('.cart-item-subtotal') || document.getElementById('subtotal-' + cartId);
+            
+            let current     = parseInt(numEl?.textContent || numEl?.value || 1);
             const newQty    = isPlus ? current + 1 : Math.max(1, current - 1);
 
-            if (numEl) numEl.textContent = newQty;
+            if (numEl) {
+                if (numEl.tagName === 'SPAN' || numEl.tagName === 'DIV') {
+                    numEl.textContent = newQty;
+                } else {
+                    numEl.value = newQty;
+                }
+            }
             if (cartId) updateQuantity(cartId, newQty, subtotEl);
         });
     });
@@ -206,7 +236,7 @@ function initCheckoutSteps() {
     };
 }
 
-/* ── INIT ───────────────────────────────────── */
+/* ── INIT ALL ───────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
     initQtyButtons();
     initCheckoutSteps();
@@ -216,10 +246,26 @@ document.addEventListener('DOMContentLoaded', () => {
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
             const fd     = new FormData(this);
-            const foodId = fd.get('food_id');
+            let foodId   = fd.get('food_id');
+            if (!foodId) {
+                // Try getting it from data-food-id attribute on the form
+                foodId = this.dataset.foodId || this.getAttribute('data-food-id');
+            }
             const qty    = parseInt(fd.get('quantity')) || 1;
-            const btn    = this.querySelector('[type="submit"]');
+            const btn    = this.querySelector('[type="submit"]') || this.querySelector('.btn-add-cart');
             await addToCart(foodId, qty, btn);
+        });
+    });
+
+    // Attach remove-from-cart buttons
+    document.querySelectorAll('.remove-btn').forEach(btn => {
+        btn.addEventListener('click', async function(e) {
+            e.preventDefault();
+            const cartId = this.dataset.cartId;
+            const row = this.closest('.cart-item');
+            if (confirm('Are you sure you want to remove this item?')) {
+                await removeFromCart(cartId, row);
+            }
         });
     });
 

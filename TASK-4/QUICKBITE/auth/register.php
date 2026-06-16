@@ -84,14 +84,14 @@ $csrf_token = generate_csrf_token();
     <link rel="stylesheet" href="../assets/css/animations.css">
     <style>
         :root {
-            --neon-cyan: #00F7FF;
-            --bg-dark: #050816;
-            --bg-secondary: #0B1020;
-            --bg-card: rgba(255, 255, 255, 0.04);
-            --text-primary: #F0F4FF;
-            --text-secondary: #94A3B8;
-            --grad-primary: linear-gradient(135deg, #00F7FF, #3A86FF);
-            --border-glass: rgba(255, 255, 255, 0.08);
+            --neon-cyan: #FF5A00;
+            --bg-dark: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --bg-card: #FFFFFF;
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --grad-primary: linear-gradient(135deg, #FF5A00, #FF8C42);
+            --border-glass: #E2E8F0;
         }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -99,7 +99,7 @@ $csrf_token = generate_csrf_token();
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg-dark);
-            color: var(--text-primary);
+            color: #0F172A;
             min-height: 100vh;
             display: flex;
             overflow-x: hidden;
@@ -137,7 +137,7 @@ $csrf_token = generate_csrf_token();
             border: 1px solid var(--border-glass);
             border-radius: 20px;
             padding: 28px 32px;
-            backdrop-filter: blur(20px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
         }
 
         .alert {
@@ -165,19 +165,19 @@ $csrf_token = generate_csrf_token();
 
         .form-input {
             width: 100%;
-            background: rgba(255,255,255,0.04);
+            background: #F8FAFC;
             border: 1px solid var(--border-glass);
             border-radius: 11px;
             padding: 12px 14px 12px 42px;
-            color: var(--text-primary);
+            color: #0F172A;
             font-family: 'Inter', sans-serif;
             font-size: 13.5px;
             transition: border-color 0.2s, box-shadow 0.2s;
             outline: none;
         }
 
-        .form-input:focus { border-color: var(--neon-cyan); box-shadow: 0 0 0 3px rgba(0,247,255,0.08); }
-        .form-input::placeholder { color: rgba(148,163,184,0.45); }
+        .form-input:focus { border-color: var(--neon-cyan); box-shadow: 0 0 0 3px rgba(255,90,0,0.15); }
+        .form-input::placeholder { color: rgba(148,163,184,0.7); }
         .form-input.input-error { border-color: #FF4D6D; }
         .form-input.input-success { border-color: #00D97E; }
 
@@ -193,7 +193,7 @@ $csrf_token = generate_csrf_token();
         .strength-bars { display: flex; gap: 4px; margin-bottom: 4px; }
         .strength-bar {
             height: 3px; flex: 1; border-radius: 2px;
-            background: rgba(255,255,255,0.1);
+            background: #E2E8F0;
             transition: background 0.3s ease;
         }
         .strength-label { font-size: 11px; color: var(--text-secondary); }
@@ -206,12 +206,12 @@ $csrf_token = generate_csrf_token();
         .btn-primary {
             width: 100%; padding: 13px;
             background: var(--grad-primary); border: none; border-radius: 12px;
-            color: #050816; font-family: 'Inter', sans-serif; font-size: 14.5px; font-weight: 700;
+            color: #FFFFFF; font-family: 'Inter', sans-serif; font-size: 14.5px; font-weight: 700;
             cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 20px rgba(0,247,255,0.3); letter-spacing: 0.3px;
+            box-shadow: 0 4px 20px rgba(255,90,0,0.3); letter-spacing: 0.3px;
             margin-top: 4px;
         }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,247,255,0.5); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,90,0,0.5); }
         .btn-primary:active { transform: translateY(0); }
         .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
@@ -226,18 +226,19 @@ $csrf_token = generate_csrf_token();
         /* ── RIGHT PANEL ── */
         .auth-right {
             flex: 1;
-            background: linear-gradient(145deg, #050816 0%, #0a1628 50%, #0d1f3c 100%);
+            background: linear-gradient(145deg, #F8FAFC 0%, #0a1628 50%, #0d1f3c 100%);
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
             padding: 60px 50px;
             position: relative; overflow: hidden;
+            color: #FFFFFF;
         }
 
         .auth-right::before {
             content: '';
             position: absolute;
             width: 500px; height: 500px;
-            background: radial-gradient(circle, rgba(0,247,255,0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(255,90,0,0.1) 0%, transparent 70%);
             top: -80px; right: -100px; border-radius: 50%;
             animation: pulseGlow 4s ease-in-out infinite;
         }
@@ -246,7 +247,7 @@ $csrf_token = generate_csrf_token();
             content: '';
             position: absolute;
             width: 350px; height: 350px;
-            background: radial-gradient(circle, rgba(58,134,255,0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(255,140,66,0.1) 0%, transparent 70%);
             bottom: -60px; left: -60px; border-radius: 50%;
             animation: pulseGlow 4s ease-in-out infinite 2s;
         }
@@ -254,14 +255,14 @@ $csrf_token = generate_csrf_token();
         @keyframes pulseGlow { 0%,100%{transform:scale(1);opacity:.6} 50%{transform:scale(1.1);opacity:1} }
 
         .brand-logo { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; position: relative; z-index: 1; }
-        .brand-logo-icon { width: 56px; height: 56px; background: var(--grad-primary); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 0 30px rgba(0,247,255,0.4); }
+        .brand-logo-icon { width: 56px; height: 56px; background: var(--grad-primary); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 0 30px rgba(255,90,0,0.4); }
         .brand-logo-text { font-size: 32px; font-weight: 800; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 
-        .hero-emoji { font-size: 100px; margin: 28px 0; position: relative; z-index: 1; animation: floatEmoji 3s ease-in-out infinite; filter: drop-shadow(0 0 30px rgba(0,247,255,0.3)); }
+        .hero-emoji { font-size: 100px; margin: 28px 0; position: relative; z-index: 1; animation: floatEmoji 3s ease-in-out infinite; filter: drop-shadow(0 0 30px rgba(255,90,0,0.3)); }
         @keyframes floatEmoji { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-16px)} }
 
-        .hero-headline { font-size: 26px; font-weight: 700; text-align: center; line-height: 1.4; margin-bottom: 12px; position: relative; z-index: 1; }
-        .hero-subtext { font-size: 14px; color: var(--text-secondary); text-align: center; max-width: 300px; position: relative; z-index: 1; line-height: 1.6; }
+        .hero-headline { font-size: 26px; font-weight: 700; text-align: center; line-height: 1.4; margin-bottom: 12px; position: relative; z-index: 1; color: #FFFFFF; }
+        .hero-subtext { font-size: 14px; color: #CBD5E1; text-align: center; max-width: 300px; position: relative; z-index: 1; line-height: 1.6; }
 
         .perks-list { margin-top: 36px; display: flex; flex-direction: column; gap: 14px; position: relative; z-index: 1; }
         .perk-item { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-glass); border-radius: 12px; padding: 12px 18px; backdrop-filter: blur(10px); animation: slideUpFade 0.8s ease forwards; opacity: 0; }
@@ -269,7 +270,7 @@ $csrf_token = generate_csrf_token();
         @keyframes slideUpFade { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
         .perk-icon { font-size: 24px; }
         .perk-text h4 { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
-        .perk-text p { font-size: 12px; color: var(--text-secondary); }
+        .perk-text p { font-size: 12px; color: #CBD5E1; }
 
         @media (max-width:960px) { .auth-right { display: none; } .auth-left { width: 100%; min-width: unset; } }
         @media (max-width:480px) { .auth-left { padding: 24px 16px; } .glass-card { padding: 22px 18px; } .form-row { grid-template-columns: 1fr; } }

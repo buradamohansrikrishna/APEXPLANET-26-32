@@ -1,5 +1,39 @@
 <?php
 // ================================================
+// ALIAS LAYER — All files call these names
+// ================================================
+function generate_csrf_token() {
+    if (session_status() === PHP_SESSION_NONE) session_start();
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['csrf_token'];
+}
+
+function verify_csrf_token($token) {
+    if (session_status() === PHP_SESSION_NONE) session_start();
+    return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token ?? '');
+}
+
+function sanitize_input($input) {
+    return sanitize_string($input);
+}
+
+function set_flash_message($type, $message) {
+    if (session_status() === PHP_SESSION_NONE) session_start();
+    $_SESSION['flash'] = ['type' => $type, 'message' => $message];
+}
+
+function get_flash_message() {
+    if (session_status() === PHP_SESSION_NONE) session_start();
+    if (isset($_SESSION['flash'])) {
+        $flash = $_SESSION['flash'];
+        unset($_SESSION['flash']);
+        return $flash;
+    }
+    return null;
+}
+// ================================================
 // QUICKBITE 2.0 — SECURITY HELPERS
 // ================================================
 

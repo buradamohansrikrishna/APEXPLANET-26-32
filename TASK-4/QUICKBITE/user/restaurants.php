@@ -11,7 +11,7 @@ $params      = [];
 $types       = '';
 
 if ($search !== '') {
-    $where_parts[] = "(r.name LIKE ? OR r.description LIKE ?)";
+    $where_parts[] = "(r.restaurant_name LIKE ? OR r.description LIKE ?)";
     $like = "%{$search}%";
     $params[] = $like;
     $params[] = $like;
@@ -25,13 +25,12 @@ if ($category !== '' && $category !== 'All') {
 }
 
 $where_sql = implode(' AND ', $where_parts);
-$sql = "SELECT r.*, 
-               COALESCE(AVG(rv.rating), 0) as avg_rating,
-               COUNT(rv.id) as review_count
+$sql = "SELECT r.id, r.restaurant_name as name, r.location, r.image, r.description, r.address, 
+               r.rating as avg_rating, r.category, r.opening_time, r.closing_time, r.delivery_time, 
+               r.min_order, r.status, r.cover_image, r.created_at,
+               (SELECT COUNT(*) FROM reviews rv JOIN foods f ON rv.food_id = f.id WHERE f.restaurant_id = r.id) as review_count
         FROM restaurants r
-        LEFT JOIN reviews rv ON rv.restaurant_id = r.id
         WHERE {$where_sql}
-        GROUP BY r.id
         ORDER BY avg_rating DESC";
 
 $stmt = $conn->prepare($sql);
@@ -72,9 +71,9 @@ function is_open(string $opening, string $closing): bool {
     <link rel="stylesheet" href="../assets/css/responsive.css">
     <style>
         :root {
-            --neon-cyan:#00F7FF; --bg-dark:#050816; --bg-secondary:#0B1020;
-            --bg-card:rgba(255,255,255,0.04); --text-primary:#F0F4FF; --text-secondary:#94A3B8;
-            --border-glass:rgba(255,255,255,0.08); --neon-glow:0 0 20px rgba(0,247,255,0.3);
+            --neon-cyan:#FF5A00; --bg-dark:#F8FAFC; --bg-secondary:#FFFFFF;
+            --bg-card:#FFFFFF; --text-primary:#0F172A; --text-secondary:#475569;
+            --border-glass:#E2E8F0; --neon-glow:0 0 20px rgba(255,71,71,0.3);
             --green:#00D084; --orange:#FF8C42;
         }
         *{margin:0;padding:0;box-sizing:border-box;}
@@ -82,12 +81,12 @@ function is_open(string $opening, string $closing): bool {
 
         /* HERO */
         .page-hero{
-            background:linear-gradient(135deg,#050816 0%,#0a1a3e 60%,#050816 100%);
+            background:linear-gradient(135deg,#F8FAFC 0%,#F1F5F9 60%,#F8FAFC 100%);
             padding:4rem 2rem 3rem; text-align:center; position:relative; overflow:hidden;
         }
         .page-hero::before{
             content:'';position:absolute;inset:0;
-            background:radial-gradient(ellipse 80% 60% at 50% 100%,rgba(0,247,255,0.06),transparent);
+            background:radial-gradient(ellipse 80% 60% at 50% 100%,rgba(255,71,71,0.06),transparent);
             pointer-events:none;
         }
         .page-hero h1{font-size:2.6rem;font-weight:800;margin-bottom:0.6rem;}
@@ -102,12 +101,12 @@ function is_open(string $opening, string $closing): bool {
             border-radius:12px;color:var(--text-primary);font-size:0.95rem;
             backdrop-filter:blur(10px);outline:none;transition:border-color 0.3s;
         }
-        .search-input:focus{border-color:var(--neon-cyan);box-shadow:0 0 0 3px rgba(0,247,255,0.1);}
+        .search-input:focus{border-color:var(--neon-cyan);box-shadow:0 0 0 3px rgba(255,71,71,0.1);}
         .search-input::placeholder{color:var(--text-secondary);}
         .btn-search{
             padding:0.85rem 1.6rem;
             background:linear-gradient(135deg,var(--neon-cyan),#00b8c8);
-            border:none;border-radius:12px;color:#050816;font-weight:700;
+            border:none;border-radius:12px;color:#0F172A;font-weight:700;
             cursor:pointer;transition:opacity 0.3s;white-space:nowrap;
         }
         .btn-search:hover{opacity:0.85;}
@@ -121,8 +120,8 @@ function is_open(string $opening, string $closing): bool {
             transition:all 0.25s ease;white-space:nowrap;
         }
         .filter-pill:hover,.filter-pill.active{
-            background:rgba(0,247,255,0.12);border-color:var(--neon-cyan);
-            color:var(--neon-cyan);box-shadow:0 0 12px rgba(0,247,255,0.2);
+            background:rgba(255,71,71,0.12);border-color:var(--neon-cyan);
+            color:var(--neon-cyan);box-shadow:0 0 12px rgba(255,71,71,0.2);
         }
 
         /* RESULTS META */
@@ -140,13 +139,13 @@ function is_open(string $opening, string $closing): bool {
             transition:all 0.35s ease;animation:card-in 0.5s ease both;
         }
         @keyframes card-in{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
-        .rest-card:hover{transform:translateY(-6px);border-color:rgba(0,247,255,0.25);box-shadow:0 12px 30px rgba(0,0,0,0.5);}
+        .rest-card:hover{transform:translateY(-6px);border-color:rgba(255,71,71,0.25);box-shadow:0 12px 30px rgba(0,0,0,0.5);}
         .rest-img-wrap{position:relative;height:190px;overflow:hidden;}
         .rest-img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s ease;}
         .rest-card:hover .rest-img{transform:scale(1.05);}
         .rest-img-placeholder{
             width:100%;height:190px;
-            background:linear-gradient(135deg,#0B1020,#0d1a40);
+            background:linear-gradient(135deg,#FFFFFF,#0d1a40);
             display:flex;align-items:center;justify-content:center;font-size:3.5rem;
         }
         .rating-badge{
@@ -163,7 +162,7 @@ function is_open(string $opening, string $closing): bool {
         .open-badge.closed{background:rgba(255,100,100,0.2);border:1px solid rgba(255,100,100,0.4);color:#ff6464;}
         .rest-body{padding:1.2rem;}
         .rest-meta{display:flex;gap:0.6rem;margin-bottom:0.6rem;flex-wrap:wrap;}
-        .rest-cat{font-size:0.72rem;padding:0.2rem 0.6rem;border-radius:10px;background:rgba(0,247,255,0.08);color:var(--neon-cyan);border:1px solid rgba(0,247,255,0.2);font-weight:600;}
+        .rest-cat{font-size:0.72rem;padding:0.2rem 0.6rem;border-radius:10px;background:rgba(255,71,71,0.08);color:var(--neon-cyan);border:1px solid rgba(255,71,71,0.2);font-weight:600;}
         .rest-time{font-size:0.72rem;padding:0.2rem 0.6rem;border-radius:10px;background:rgba(255,140,66,0.1);color:var(--orange);border:1px solid rgba(255,140,66,0.2);font-weight:600;}
         .rest-name{font-size:1.1rem;font-weight:700;margin-bottom:0.4rem;}
         .rest-desc{font-size:0.82rem;color:var(--text-secondary);margin-bottom:1rem;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
@@ -171,7 +170,7 @@ function is_open(string $opening, string $closing): bool {
             display:block;width:100%;text-align:center;
             padding:0.65rem;border-radius:10px;
             background:linear-gradient(135deg,var(--neon-cyan),#00b8c8);
-            color:#050816;font-weight:700;font-size:0.88rem;
+            color:#0F172A;font-weight:700;font-size:0.88rem;
             text-decoration:none;transition:opacity 0.3s;
         }
         .btn-menu:hover{opacity:0.85;}

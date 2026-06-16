@@ -301,8 +301,8 @@ strtolower($order['order_status']);
 <div class="order-card">
 
     <img
-    src="../assets/images/foods/<?php
-    echo $order['image'];
+    src="../<?php
+    echo htmlspecialchars($order['image']);
     ?>"
     >
 

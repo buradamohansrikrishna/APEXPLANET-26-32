@@ -25,7 +25,7 @@ $total_orders = $stmt->get_result()->fetch_assoc()['total_orders'];
 $stmt->close();
 
 // Total spent (Delivered orders)
-$stmt = $conn->prepare("SELECT COALESCE(SUM(total_price), 0) as total_spent FROM orders WHERE user_id = ? AND status = 'Delivered'");
+$stmt = $conn->prepare("SELECT COALESCE(SUM(total_price), 0) as total_spent FROM orders WHERE user_id = ? AND order_status = 'Delivered'");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $total_spent = $stmt->get_result()->fetch_assoc()['total_spent'];
@@ -39,12 +39,12 @@ $reward_points = $user['reward_points'] ?? 0;
 
 // Last 3 orders
 $stmt = $conn->prepare("
-    SELECT o.id, o.order_number, o.total_price, o.status, o.order_date,
-           f.name as food_name, f.image as food_image
+    SELECT o.id, o.order_number, o.total_price, o.order_status as status, o.created_at as order_date,
+           f.food_name as food_name, f.image as food_image
     FROM orders o
     LEFT JOIN foods f ON o.food_id = f.id
     WHERE o.user_id = ?
-    ORDER BY o.order_date DESC
+    ORDER BY o.created_at DESC
     LIMIT 3
 ");
 $stmt->bind_param("i", $user_id);
@@ -54,7 +54,7 @@ $stmt->close();
 
 // Favorite foods
 $stmt = $conn->prepare("
-    SELECT f.id, f.name, f.price, f.image, f.category, f.is_veg
+    SELECT f.id, f.food_name as name, f.price, f.image, f.category, f.is_veg
     FROM favorites fav
     JOIN foods f ON fav.food_id = f.id
     WHERE fav.user_id = ?
@@ -67,12 +67,12 @@ $stmt->close();
 
 // Recommendations (random foods not ordered by user)
 $stmt = $conn->prepare("
-    SELECT f.id, f.name, f.price, f.image, f.category, f.is_veg, f.description
+    SELECT f.id, f.food_name as name, f.price, f.image, f.category, f.is_veg, f.description
     FROM foods f
     WHERE f.id NOT IN (
         SELECT DISTINCT food_id FROM orders WHERE user_id = ?
     )
-    AND f.is_available = 1
+    AND f.availability = 'available'
     ORDER BY RAND()
     LIMIT 3
 ");
@@ -100,14 +100,14 @@ $user_name = $user['name'] ?? 'User';
     <link rel="stylesheet" href="../assets/css/responsive.css">
     <style>
         :root {
-            --neon-cyan: #00F7FF;
-            --bg-dark: #050816;
-            --bg-secondary: #0B1020;
-            --bg-card: rgba(255,255,255,0.04);
-            --text-primary: #F0F4FF;
-            --text-secondary: #94A3B8;
-            --border-glass: rgba(255,255,255,0.08);
-            --neon-glow: 0 0 20px rgba(0,247,255,0.3);
+            --neon-cyan: #FF5A00;
+            --bg-dark: #F8FAFC;
+            --bg-secondary: #FFFFFF;
+            --bg-card: #FFFFFF;
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --border-glass: #E2E8F0;
+            --neon-glow: 0 0 20px rgba(255,71,71,0.3);
             --green: #00D084;
             --orange: #FF8C42;
             --purple: #9B59B6;
@@ -118,7 +118,7 @@ $user_name = $user['name'] ?? 'User';
 
         /* HERO */
         .dash-hero {
-            background: linear-gradient(135deg, #050816 0%, #0a1a3e 50%, #050816 100%);
+            background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 50%, #F8FAFC 100%);
             padding: 4rem 2rem 3rem;
             position: relative;
             overflow: hidden;
@@ -130,7 +130,7 @@ $user_name = $user['name'] ?? 'User';
             left: -20%;
             width: 60%;
             height: 200%;
-            background: radial-gradient(ellipse, rgba(0,247,255,0.07) 0%, transparent 70%);
+            background: radial-gradient(ellipse, rgba(255,71,71,0.07) 0%, transparent 70%);
             pointer-events: none;
         }
         .dash-hero::after {
@@ -147,13 +147,13 @@ $user_name = $user['name'] ?? 'User';
             width:80px; height:80px; border-radius:50%;
             background: linear-gradient(135deg, var(--neon-cyan), #9B59B6);
             display:flex; align-items:center; justify-content:center;
-            font-size:1.8rem; font-weight:800; color:#050816;
+            font-size:1.8rem; font-weight:800; color:#0F172A;
             flex-shrink:0; box-shadow: var(--neon-glow);
             animation: pulse-avatar 3s ease-in-out infinite;
         }
         @keyframes pulse-avatar {
-            0%,100% { box-shadow: 0 0 20px rgba(0,247,255,0.3); }
-            50% { box-shadow: 0 0 40px rgba(0,247,255,0.6); }
+            0%,100% { box-shadow: 0 0 20px rgba(255,71,71,0.3); }
+            50% { box-shadow: 0 0 40px rgba(255,71,71,0.6); }
         }
         .hero-text .greeting { font-size:0.95rem; color:var(--neon-cyan); font-weight:600; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.4rem; }
         .hero-text h1 { font-size:2.2rem; font-weight:800; margin-bottom:0.5rem; }
@@ -183,13 +183,13 @@ $user_name = $user['name'] ?? 'User';
         .stat-card:nth-child(3) { animation-delay:0.3s; }
         .stat-card:nth-child(4) { animation-delay:0.4s; }
         @keyframes card-in { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-        .stat-card:hover { transform:translateY(-4px); box-shadow:0 8px 30px rgba(0,247,255,0.15); }
+        .stat-card:hover { transform:translateY(-4px); box-shadow:0 8px 30px rgba(255,71,71,0.15); }
         .stat-icon {
             width:54px; height:54px; border-radius:14px;
             display:flex; align-items:center; justify-content:center;
             font-size:1.5rem; flex-shrink:0;
         }
-        .stat-icon.cyan { background:rgba(0,247,255,0.15); }
+        .stat-icon.cyan { background:rgba(255,71,71,0.15); }
         .stat-icon.green { background:rgba(0,208,132,0.15); }
         .stat-icon.purple { background:rgba(155,89,182,0.15); }
         .stat-icon.orange { background:rgba(255,140,66,0.15); }
@@ -217,7 +217,7 @@ $user_name = $user['name'] ?? 'User';
             transition:all 0.3s ease;
             display:flex; flex-direction:column; align-items:center; gap:0.7rem;
         }
-        .action-card:hover { transform:translateY(-4px); border-color:var(--neon-cyan); box-shadow:0 0 20px rgba(0,247,255,0.15); color:var(--neon-cyan); }
+        .action-card:hover { transform:translateY(-4px); border-color:var(--neon-cyan); box-shadow:0 0 20px rgba(255,71,71,0.15); color:var(--neon-cyan); }
         .action-icon { font-size:2rem; }
         .action-label { font-size:0.88rem; font-weight:600; }
 
@@ -226,15 +226,15 @@ $user_name = $user['name'] ?? 'User';
         .orders-table { width:100%; border-collapse:collapse; }
         .orders-table th { text-align:left; font-size:0.78rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-secondary); padding:0.7rem 1rem; border-bottom:1px solid var(--border-glass); }
         .orders-table td { padding:0.9rem 1rem; border-bottom:1px solid rgba(255,255,255,0.03); font-size:0.92rem; }
-        .orders-table tr:hover td { background:rgba(0,247,255,0.03); }
+        .orders-table tr:hover td { background:rgba(255,71,71,0.03); }
         .status-badge { display:inline-block; padding:0.3rem 0.8rem; border-radius:20px; font-size:0.75rem; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; }
         .status-badge.delivered { background:rgba(0,208,132,0.15); color:var(--green); border:1px solid rgba(0,208,132,0.3); }
         .status-badge.pending { background:rgba(255,140,66,0.15); color:var(--orange); border:1px solid rgba(255,140,66,0.3); }
         .status-badge.cancelled { background:rgba(255,100,100,0.15); color:#ff6464; border:1px solid rgba(255,100,100,0.3); }
-        .status-badge.preparing { background:rgba(0,247,255,0.12); color:var(--neon-cyan); border:1px solid rgba(0,247,255,0.3); }
+        .status-badge.preparing { background:rgba(255,71,71,0.12); color:var(--neon-cyan); border:1px solid rgba(255,71,71,0.3); }
         .status-badge.accepted { background:rgba(155,89,182,0.15); color:var(--purple); border:1px solid rgba(155,89,182,0.3); }
         .status-badge.ready { background:rgba(255,107,157,0.15); color:var(--pink); border:1px solid rgba(255,107,157,0.3); }
-        .status-badge.out-for-delivery { background:rgba(0,247,255,0.1); color:#7dd3fc; border:1px solid rgba(125,211,252,0.3); }
+        .status-badge.out-for-delivery { background:rgba(255,71,71,0.1); color:#7dd3fc; border:1px solid rgba(125,211,252,0.3); }
 
         /* FOOD CARDS */
         .foods-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; margin-bottom:2.5rem; }
@@ -247,12 +247,12 @@ $user_name = $user['name'] ?? 'User';
             overflow:hidden;
             transition:all 0.35s ease;
         }
-        .food-card:hover { transform:translateY(-6px); border-color:rgba(0,247,255,0.25); box-shadow:0 12px 30px rgba(0,0,0,0.4); }
+        .food-card:hover { transform:translateY(-6px); border-color:rgba(255,71,71,0.25); box-shadow:0 12px 30px rgba(0,0,0,0.4); }
         .food-img { width:100%; height:180px; object-fit:cover; }
-        .food-img-placeholder { width:100%; height:180px; background:linear-gradient(135deg,#0B1020,#0d1a40); display:flex; align-items:center; justify-content:center; font-size:3rem; }
+        .food-img-placeholder { width:100%; height:180px; background:linear-gradient(135deg,#FFFFFF,#0d1a40); display:flex; align-items:center; justify-content:center; font-size:3rem; }
         .food-body { padding:1.1rem; }
         .food-badges { display:flex; gap:0.5rem; margin-bottom:0.6rem; flex-wrap:wrap; }
-        .cat-badge { font-size:0.7rem; padding:0.2rem 0.6rem; border-radius:10px; background:rgba(0,247,255,0.1); color:var(--neon-cyan); border:1px solid rgba(0,247,255,0.2); font-weight:600; }
+        .cat-badge { font-size:0.7rem; padding:0.2rem 0.6rem; border-radius:10px; background:rgba(255,71,71,0.1); color:var(--neon-cyan); border:1px solid rgba(255,71,71,0.2); font-weight:600; }
         .veg-badge { font-size:0.7rem; padding:0.2rem 0.6rem; border-radius:10px; background:rgba(0,208,132,0.1); color:var(--green); border:1px solid rgba(0,208,132,0.2); font-weight:600; }
         .nonveg-badge { font-size:0.7rem; padding:0.2rem 0.6rem; border-radius:10px; background:rgba(255,100,100,0.1); color:#ff6464; border:1px solid rgba(255,100,100,0.2); font-weight:600; }
         .food-name { font-size:1rem; font-weight:700; margin-bottom:0.3rem; }
@@ -261,7 +261,7 @@ $user_name = $user['name'] ?? 'User';
             width:100%; padding:0.6rem;
             background:linear-gradient(135deg,var(--neon-cyan),#00b8c8);
             border:none; border-radius:10px;
-            color:#050816; font-weight:700; font-size:0.88rem;
+            color:#0F172A; font-weight:700; font-size:0.88rem;
             cursor:pointer; transition:all 0.3s ease;
         }
         .btn-add-cart:hover { opacity:0.85; transform:scale(1.02); }
@@ -343,6 +343,10 @@ $user_name = $user['name'] ?? 'User';
         <a href="profile.php" class="action-card" id="quick-profile">
             <span class="action-icon">👤</span>
             <span class="action-label">Profile</span>
+        </a>
+        <a href="#" class="action-card" onclick="openAppRateModal(); return false;" id="quick-rate">
+            <span class="action-icon">⭐</span>
+            <span class="action-label">Rate App</span>
         </a>
     </div>
 
@@ -468,6 +472,82 @@ document.querySelectorAll('.counter').forEach(function(el) {
         el.textContent = current;
         if (current >= target) clearInterval(timer);
     }, 30);
+});
+</script>
+
+<!-- App Rate Modal -->
+<div id="appRateModal" class="modal">
+    <div class="modal-content">
+        <h3>Rate QuickBite</h3>
+        <p style="font-size:0.9rem;color:var(--text-secondary);margin-bottom:1rem;">How is your experience with our app?</p>
+        <form id="appRateForm">
+            <input type="hidden" name="csrf_token" value="<?= $csrf_token ?? '' ?>">
+            <input type="hidden" name="rating" id="app_rating_input" value="0">
+            
+            <div style="font-size:2rem;margin-bottom:1rem;display:flex;gap:0.5rem;justify-content:center;">
+                <button type="button" class="app-star-btn" data-rating="1" style="background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:2.5rem;">★</button>
+                <button type="button" class="app-star-btn" data-rating="2" style="background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:2.5rem;">★</button>
+                <button type="button" class="app-star-btn" data-rating="3" style="background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:2.5rem;">★</button>
+                <button type="button" class="app-star-btn" data-rating="4" style="background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:2.5rem;">★</button>
+                <button type="button" class="app-star-btn" data-rating="5" style="background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:2.5rem;">★</button>
+            </div>
+            
+            <div class="form-group">
+                <textarea name="comment" class="form-control" placeholder="Any suggestions for us?" rows="3"></textarea>
+            </div>
+            
+            <div style="display:flex;gap:1rem;margin-top:1rem;">
+                <button type="button" onclick="closeAppRateModal()" class="btn-secondary" style="flex:1;padding:0.8rem;border-radius:10px;border:1px solid var(--border-glass);background:var(--bg-card);color:var(--text-primary);cursor:pointer;">Cancel</button>
+                <button type="submit" class="btn-primary" style="flex:1;padding:0.8rem;border-radius:10px;border:none;background:var(--neon-cyan);color:#fff;cursor:pointer;font-weight:bold;">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+<style>
+.modal { display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.6); backdrop-filter:blur(5px); align-items:center; justify-content:center; }
+.modal.show { display:flex; }
+.modal-content { background:var(--bg-secondary); padding:2rem; border-radius:16px; width:90%; max-width:400px; text-align:center; box-shadow:var(--shadow-card); }
+</style>
+<script>
+// Rate App Modal Logic
+function openAppRateModal() { document.getElementById('appRateModal').classList.add('show'); }
+function closeAppRateModal() { document.getElementById('appRateModal').classList.remove('show'); }
+
+document.querySelectorAll('.app-star-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        let rating = this.getAttribute('data-rating');
+        document.getElementById('app_rating_input').value = rating;
+        
+        document.querySelectorAll('.app-star-btn').forEach(b => {
+            if (b.getAttribute('data-rating') <= rating) {
+                b.style.color = '#FFB800';
+            } else {
+                b.style.color = 'var(--text-secondary)';
+            }
+        });
+    });
+});
+
+document.getElementById('appRateForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    let rating = document.getElementById('app_rating_input').value;
+    if (rating === '0') {
+        alert('Please select a star rating.');
+        return;
+    }
+
+    let formData = new FormData(this);
+    fetch('ajax/rate-app.php', { method: 'POST', body: formData })
+    .then(r => r.json())
+    .then(data => {
+        if(data.success) {
+            alert(data.message);
+            closeAppRateModal();
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(err => alert('An error occurred.'));
 });
 </script>
 </body>

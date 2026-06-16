@@ -29,7 +29,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     <div class="navbar-inner">
 
         <!-- Logo -->
-        <a href="<?= $base ?>index.php" class="logo">Quick<span style="color:#00F7FF">Bite</span></a>
+        <a href="<?= $base ?>index.php" class="logo">Quick<span style="color:#FF4747">Bite</span></a>
 
         <!-- Nav Links -->
         <ul class="nav-links" id="navLinks">
@@ -58,7 +58,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             <div style="position:relative" id="userMenu">
                 <button onclick="document.getElementById('userDropdown').classList.toggle('open')"
                     style="background:var(--bg-glass);border:1px solid var(--bg-glass-border);border-radius:var(--radius-full);
-                    padding:6px 12px;display:flex;align-items:center;gap:8px;color:var(--text-primary);cursor:pointer;font-size:0.85rem;">
+                    padding:6px 12px;display:flex;align-items:center;gap:8px;color:var(--text-secondary);cursor:pointer;font-size:0.85rem;">
                     <span style="background:var(--grad-primary);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:700">
                         <?= strtoupper(substr($userName,0,1)) ?>
                     </span>

@@ -1,9 +1,9 @@
 # QuickBite 🍔
 
-### Modern Food Ordering & Restaurant Management System
+### Modern Food Ordering & Restaurant Management System (v2.0)
 
-QuickBite is a modern full-stack food ordering web application developed using **PHP, MySQL, HTML, CSS, and JavaScript**.
-The platform allows users to browse restaurants, explore food menus, add items to cart, place orders, and manage food ordering seamlessly.
+QuickBite is a premium full-stack food ordering web application developed using **PHP, MySQL, HTML5, CSS3, and JavaScript**. 
+The platform allows users to browse restaurants, explore food menus, add items to cart, place orders, write detailed customer reviews, and manage food ordering seamlessly. It also features a fully-fledged admin dashboard for store operations.
 
 ---
 
@@ -11,37 +11,26 @@ The platform allows users to browse restaurants, explore food menus, add items t
 
 ## 👤 User Features
 
-* User Registration & Login
-* Secure Authentication System
-* Browse Restaurants
-* Explore Restaurant Menus
-* Add Food to Cart
-* Checkout System
-* Order Management
-* Responsive Dashboard
-* Modern Responsive UI
+* **User Registration & Login**: Secure password hashing and authentication system.
+* **Browse Restaurants**: Dynamic listing with categories, ratings, opening times, and status (Open/Closed).
+* **Explore Restaurant Menus**: Search filters for veg/non-veg options, categories, and live search.
+* **Dynamic Cart System**: Add to cart with quantity selection, automatic totals, and saving items for later.
+* **Customer Reviews**: Write reviews with titles, comments, and star ratings (1-5★). Includes verified purchase badges.
+* **Rating Breakdown**: Interactive rating breakdown bars showing exact percentages and average ratings for dishes.
+* **Favorites**: Toggle favorite food items with a single click.
+* **Notifications**: Integrated system notifications for order statuses and promotions.
+* **Checkout System**: Multi-payment method selector (COD, UPI, Card, Netbanking), address book, and coupon applicability.
 
 ---
 
 ## 🛠️ Admin Features
 
-* Admin Dashboard
-* Manage Restaurants
-* Add / Delete Foods
-* View Orders
-* Track Users
-* Food Management System
-
----
-
-# 💻 Technologies Used
-
-* HTML5
-* CSS3
-* JavaScript
-* PHP
-* MySQL
-* Responsive Web Design
+* **Admin Dashboard**: Visual stats of total users, orders, foods, restaurants, and total revenue.
+* **Manage Restaurants**: Add, update, and manage restaurant details.
+* **Food Management**: Create, edit, search, and filter food items. Toggle item availability in real-time.
+* **Coupons System**: Manage discount coupons (percentage/flat off, expiry dates, min-orders).
+* **Orders Panel**: Real-time status update tracking (Pending, Accepted, Preparing, Ready, Out for Delivery, Delivered, Cancelled).
+* **User Management**: View and ban/activate customer accounts.
 
 ---
 
@@ -50,42 +39,40 @@ The platform allows users to browse restaurants, explore food menus, add items t
 ```text
 QuickBite/
 │
-├── admin/
-│   ├── dashboard.php
-│   ├── foods.php
-│   ├── add-food.php
-│   ├── delete-food.php
-│   └── orders.php
+├── admin/                  # Admin-specific pages and templates
+│   ├── ajax/               # Admin AJAX endpoints (user status, order status)
+│   ├── dashboard.php       # Admin analytics and metrics
+│   ├── foods.php           # Food management panel
+│   ├── add-food.php        # Create a new menu item
+│   ├── edit-food.php       # Edit menu item details
+│   ├── coupons.php         # Manage discount coupons
+│   ├── orders.php          # Manage order statuses
+│   ├── restaurants.php     # Manage restaurant lists
+│   └── users.php           # User tracking and security control
 │
-├── assets/
-│   ├── css/
-│   │   ├── style.css
-│   │   └── admin.css
-│   │
-│   ├── js/
-│   │   ├── main.js
-│   │   └── cart.js
-│   │
-│   └── images/
-│       ├── foods/
-│       └── restaurants/
+├── assets/                 # Frontend assets
+│   ├── css/                # Custom CSS styling (style.css, admin.css, animations.css)
+│   ├── js/                 # Vanilla JS scripting (main.js, cart.js)
+│   └── images/             # Static graphics and file uploads
 │
-├── auth/
-│   ├── login.php
-│   ├── register.php
-│   └── logout.php
+├── auth/                   # Authentication module (Login, Register, Logout)
 │
-├── config/
-│   └── db.php
+├── config/                 # Core configuration
+│   └── db.php              # MySQLi and PDO database connections
 │
-├── includes/
+├── database/               # SQL Database Migrations
+│   ├── quickbite_v2.sql    # Base v2.0 schema structure
+│   └── add_reviews_payment.sql # Review & Payment upgrades
+│
+├── includes/               # Reusable page components and helpers
 │   ├── navbar.php
 │   ├── footer.php
-│   └── session.php
+│   ├── security.php        # CSRF, XSS, and rate limiting helpers
+│   └── functions.php       # Global helper functions
 │
-├── user/
+├── user/                   # Customer dashboard and ordering pages
+│   ├── ajax/               # Customer AJAX endpoints (reviews, favorites, cart)
 │   ├── dashboard.php
-│   ├── restaurants.php
 │   ├── menu.php
 │   ├── cart.php
 │   ├── checkout.php
@@ -102,181 +89,47 @@ QuickBite/
 # ⚙️ Installation Steps
 
 ## 1️⃣ Install XAMPP
-
-Download and install:
-
-* Apache
-* MySQL
-
----
+Download and install XAMPP with PHP 8.0+ and MySQL.
 
 ## 2️⃣ Move Project Folder
-
-Move the project folder into:
-
+Clone/copy the repository into your XAMPP web server directory:
 ```text
-C:\xampp\htdocs\
+C:\xampp\htdocs\APEXPLANET-26-32\TASK-4
 ```
 
-Example:
-
-```text
-C:\xampp\htdocs\QuickBite
-```
-
----
-
-## 3️⃣ Start XAMPP
-
-Open XAMPP Control Panel and start:
-
-* Apache ✅
-* MySQL ✅
-
----
+## 3️⃣ Start XAMPP Server
+Open XAMPP Control Panel and start **Apache** and **MySQL**.
 
 ## 4️⃣ Create Database
+1. Open [http://localhost/phpmyadmin](http://localhost/phpmyadmin).
+2. Create a database named: `quickbite`.
 
-Open:
-
-```text
-http://localhost/phpmyadmin
-```
-
-Create database:
-
-```sql
-quickbite
-```
-
----
-
-## 5️⃣ Import SQL Tables
-
-Open SQL tab and run:
-
-```sql
-CREATE TABLE users(
-
-    id INT AUTO_INCREMENT PRIMARY KEY,
-
-    name VARCHAR(100),
-
-    email VARCHAR(100) UNIQUE,
-
-    password VARCHAR(255)
-);
-
-CREATE TABLE restaurants(
-
-    id INT AUTO_INCREMENT PRIMARY KEY,
-
-    restaurant_name VARCHAR(100),
-
-    location VARCHAR(255),
-
-    image VARCHAR(255),
-
-    description TEXT
-);
-
-CREATE TABLE foods(
-
-    id INT AUTO_INCREMENT PRIMARY KEY,
-
-    restaurant_id INT,
-
-    food_name VARCHAR(100),
-
-    price DECIMAL(10,2),
-
-    category VARCHAR(100),
-
-    image VARCHAR(255),
-
-    description TEXT
-);
-
-CREATE TABLE orders(
-
-    id INT AUTO_INCREMENT PRIMARY KEY,
-
-    user_id INT,
-
-    food_id INT,
-
-    quantity INT,
-
-    total_price DECIMAL(10,2),
-
-    order_status VARCHAR(50),
-
-    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
+## 5️⃣ Import SQL Schemas
+1. Import `QUICKBITE/database/quickbite_v2.sql` to set up the base tables.
+2. Import `QUICKBITE/database/add_reviews_payment.sql` to set up the updated reviews, order items, and payment structures.
 
 ---
 
 # ▶️ Run Project
 
-Open browser:
-
+Open your browser and navigate to:
 ```text
-http://localhost/QuickBite
+http://localhost/TASK-4/QUICKBITE
 ```
-
----
-
-# 📸 Main Pages
-
-* Home Page
-* Login / Register
-* Restaurants Page
-* Menu Page
-* Cart System
-* Checkout System
-* Orders Page
-* Admin Dashboard
 
 ---
 
 # 🌟 Key Highlights
 
-* Modern Glassmorphism UI
-* Responsive Design
-* Smooth Animations
-* Dynamic Cart System
-* Secure Password Hashing
-* Session Authentication
-* Premium Frontend Design
-
----
-
-# 🎯 Project Objective
-
-QuickBite was developed to simplify digital food ordering and restaurant management using modern web technologies while providing users with a seamless and responsive ordering experience.
-
----
-
-# 📌 Future Enhancements
-
-* Online Payment Integration
-* Live Order Tracking
-* AI Food Recommendations
-* Real-time Notifications
-* Delivery Partner Module
-* Admin Analytics Dashboard
+* **Premium Glassmorphism UI**: Beautiful dark/light mode accents, gradients, and layouts.
+* **Secure Database Access**: Dual-mode connections (MySQLi & PDO) with secure prepared statements.
+* **Security Built-in**: Protection against CSRF attacks, XSS sanitization, and session timeouts.
+* **Interactive Frontend**: Fast asynchronous rating and checkout system without page reloads.
 
 ---
 
 # 👨‍💻 Developed By
 
-**Mohan Sri Krishna**
-Full Stack Web Development Project
-ApexPlanet Internship – Task 4
-
----
-
-# 📄 License
-
-This project is developed for educational and internship purposes.
+**Mohan Sri Krishna**  
+Full Stack Web Development Project  
+ApexPlanet Internship – Task 4  

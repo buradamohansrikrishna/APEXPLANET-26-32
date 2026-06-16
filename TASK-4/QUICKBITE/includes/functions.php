@@ -15,7 +15,7 @@ function get_cart_count($user_id, $conn) {
 
 function get_cart_items($user_id, $conn) {
     $stmt = $conn->prepare("
-        SELECT c.*, f.food_name, f.price, f.image, f.category, r.restaurant_name
+        SELECT c.*, c.id AS cart_id, f.food_name, f.food_name AS name, f.price, f.image, f.category, r.restaurant_name
         FROM cart c
         JOIN foods f ON c.food_id = f.id
         JOIN restaurants r ON f.restaurant_id = r.id

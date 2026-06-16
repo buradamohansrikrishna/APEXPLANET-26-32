@@ -7,7 +7,7 @@ $errors  = [];
 $success = false;
 
 // Fetch restaurants for dropdown
-$restaurants = $pdo->query("SELECT id, name FROM restaurants ORDER BY name")->fetchAll();
+$restaurants = $pdo->query("SELECT id, restaurant_name AS name FROM restaurants ORDER BY restaurant_name")->fetchAll();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_food') {
     if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
@@ -81,14 +81,14 @@ $categories_list = ['Burger', 'Pizza', 'Sushi', 'Pasta', 'Biryani', 'Salad', 'De
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root {
-            --bg-primary: #050816; --bg-secondary: #0a0f1e;
-            --bg-glass: rgba(255,255,255,0.05); --border-glass: rgba(255,255,255,0.1);
+            --bg-primary: #F8FAFC; --bg-secondary: #0a0f1e;
+            --bg-glass: #FFFFFF; --border-glass: rgba(255,255,255,0.1);
             --neon-orange: #ff6b2b; --neon-blue: #00d4ff; --neon-purple: #7c3aed;
             --text-primary: #f0f0f0; --text-secondary: #9ca3af;
             --success: #10b981; --danger: #ef4444; --warning: #f59e0b;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: #0F172A; min-height: 100vh; }
         .admin-wrapper { display: flex; min-height: 100vh; }
         .sidebar {
             width: 260px; flex-shrink: 0; background: rgba(10,15,30,0.95);
@@ -97,12 +97,12 @@ $categories_list = ['Burger', 'Pizza', 'Sushi', 'Pasta', 'Biryani', 'Salad', 'De
         }
         .sidebar-logo { padding: 24px 20px; border-bottom: 1px solid var(--border-glass); display: flex; align-items: center; gap: 10px; }
         .sidebar-logo .logo-icon { width: 38px; height: 38px; background: linear-gradient(135deg, var(--neon-orange), #ff3d00); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
-        .sidebar-logo span { font-size: 1.2rem; font-weight: 700; color: var(--text-primary); }
+        .sidebar-logo span { font-size: 1.2rem; font-weight: 700; color: #0F172A; }
         .sidebar-logo span em { color: var(--neon-orange); font-style: normal; }
         .sidebar-nav { flex: 1; padding: 16px 0; overflow-y: auto; }
         .nav-section-label { font-size: 0.65rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.08em; padding: 8px 20px 4px; }
         .nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 20px; color: var(--text-secondary); text-decoration: none; font-size: 0.875rem; font-weight: 500; border-left: 3px solid transparent; transition: all 0.2s; }
-        .nav-item:hover { color: var(--text-primary); background: rgba(255,255,255,0.05); }
+        .nav-item:hover { color: #0F172A; background: rgba(255,255,255,0.05); }
         .nav-item.active { color: var(--neon-orange); background: rgba(255,107,43,0.08); border-left-color: var(--neon-orange); }
         .nav-item i { width: 18px; text-align: center; font-size: 0.95rem; }
         .sidebar-footer { padding: 16px 20px; border-top: 1px solid var(--border-glass); }
@@ -116,7 +116,7 @@ $categories_list = ['Burger', 'Pizza', 'Sushi', 'Pasta', 'Biryani', 'Salad', 'De
         .content-area { padding: 28px; flex: 1; max-width: 900px; }
         .page-header { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
         .page-header a { color: var(--text-secondary); text-decoration: none; font-size: 0.875rem; display: flex; align-items: center; gap: 6px; }
-        .page-header a:hover { color: var(--text-primary); }
+        .page-header a:hover { color: #0F172A; }
         .page-header h1 { font-size: 1.6rem; font-weight: 700; }
         .page-header h1 span { color: var(--neon-orange); }
 
@@ -131,7 +131,7 @@ $categories_list = ['Burger', 'Pizza', 'Sushi', 'Pasta', 'Biryani', 'Salad', 'De
         label { font-size: 0.82rem; font-weight: 600; color: var(--text-secondary); }
         .form-control {
             background: rgba(255,255,255,0.07); border: 1px solid var(--border-glass);
-            color: var(--text-primary); border-radius: 10px; padding: 11px 14px;
+            color: #0F172A; border-radius: 10px; padding: 11px 14px;
             font-size: 0.875rem; outline: none; transition: border 0.2s, box-shadow 0.2s;
             font-family: 'Inter', sans-serif; width: 100%;
         }
@@ -174,7 +174,7 @@ $categories_list = ['Burger', 'Pizza', 'Sushi', 'Pasta', 'Biryani', 'Salad', 'De
         .btn-primary { background: linear-gradient(135deg, var(--neon-orange), #ff3d00); color: #fff; box-shadow: 0 4px 15px rgba(255,107,43,0.35); }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,107,43,0.5); }
         .btn-secondary { background: rgba(255,255,255,0.08); color: var(--text-secondary); border: 1px solid var(--border-glass); }
-        .btn-secondary:hover { background: rgba(255,255,255,0.12); color: var(--text-primary); }
+        .btn-secondary:hover { background: rgba(255,255,255,0.12); color: #0F172A; }
         .form-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 30px; padding-top: 24px; border-top: 1px solid var(--border-glass); }
 
         @media (max-width: 768px) {
